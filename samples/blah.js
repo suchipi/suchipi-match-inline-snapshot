@@ -1,14 +1,19 @@
-const { match, matchConfig } = require("..");
+const { matchInlineSnapshot } = require("..");
 
-matchConfig.isCI = false;
-matchConfig.shouldUpdate = true;
+matchInlineSnapshot.config.shouldUpdateOutdated = false;
 
 const myThing = `   fjdkfjdsl blah bdjk fjsdkf jdsklfds lfjkdsl fsdjl fwhatever fd`;
 
-match(
+matchInlineSnapshot(
   myThing,
   `   fjdkfjdsl blah bdjk fjsdkf jdsklfds lfjkdsl fsdjl fwhatever fd`,
 );
 
-// different one
-match("two", `two`);
+{
+  {
+    {
+      // different one
+      matchInlineSnapshot("two", `tdsjfkdswo`);
+    }
+  }
+}
