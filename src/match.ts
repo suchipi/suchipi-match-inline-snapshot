@@ -1,3 +1,6 @@
+import kleur from "kleur";
+import { diffStringsUnified } from "jest-diff";
+import { parseError, errorFromParsed } from "./callstack-utils";
 import { getLocation } from "./get-location";
 import { updateMatchSnapshotCall } from "./update";
 import { config } from "./config";
@@ -50,13 +53,24 @@ export function matchInlineSnapshot(
         const message = [
           "Snapshots didn't match.",
           "",
-          "Expected:",
-          expected,
-          "",
-          "Actual:",
-          actual,
+          diffStringsUnified(expected || "", actual, {
+            aAnnotation: "Expected",
+            bAnnotation: "Actual",
+            commonColor: kleur.dim,
+            aColor: kleur.green,
+            bColor: kleur.red,
+          }),
         ].join("\n");
-        throw new Error(message);
+
+        const error = new Error(message);
+        const parsedError = parseError(error);
+        const newError = errorFromParsed({
+          ...parsedError,
+          // remove top stack frame so error appears to come directly from the
+          // matchInlineSnapshot call.
+          stackFrames: parsedError.stackFrames.slice(1),
+        });
+        throw newError;
       }
     }
   }

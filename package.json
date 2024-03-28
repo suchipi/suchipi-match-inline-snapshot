@@ -1,7 +1,7 @@
 {
   "name": "@suchipi/test-snapshot",
   "version": "0.1.0",
-  "description": "lightweight, framework-independent test snapshots",
+  "description": "standlone 'match inline snapshot' function",
   "main": "dist/index.js",
   "scripts": {
     "build": "rm -rf dist && tsc"
@@ -22,9 +22,10 @@
     "vitest": "^1.4.0"
   },
   "dependencies": {
-    "dedent": "^1.5.1",
     "equivalent-exchange": "^1.10.0",
     "error-stack-parser": "^2.1.4",
+    "jest-diff": "^29.7.0",
+    "kleur": "^4.1.5",
     "line-and-column-to-string-index": "^1.0.0"
   }
 }

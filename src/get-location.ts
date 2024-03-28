@@ -1,4 +1,4 @@
-import ErrorStackParser from "error-stack-parser";
+import { parseError } from "./callstack-utils";
 
 // it's named Loc instead of Location so that TypeScript doesn't mix it up with
 // the dom 'Location' class if you forget to import it
@@ -10,7 +10,8 @@ export type Loc = {
 
 export function getLocation(stackOffsetUpwards: number): Loc | null {
   const here = new Error("inside getLocation");
-  const frames = ErrorStackParser.parse(here);
+  const parsed = parseError(here);
+  const frames = parsed.stackFrames;
 
   // We add 1 here because the stack offset is from the perspective of the
   // person calling getLocation, but the Error was created within getLocation.
