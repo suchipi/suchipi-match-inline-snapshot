@@ -1,3 +1,1 @@
-import { match } from "./match";
-
-export { match };
+export { match, matchConfig } from "./match";

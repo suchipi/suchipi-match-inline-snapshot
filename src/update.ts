@@ -10,7 +10,7 @@ export function update(loc: Loc, actual: string) {
   const locIndex = lineColumnToIndex(
     code,
     loc.lineNumber - 1,
-    loc.columnNumber - 1,
+    loc.columnNumber,
   );
 
   const ast = ee.codeToAst(code);
@@ -40,7 +40,9 @@ export function update(loc: Loc, actual: string) {
         })
       ) {
         if (!ACCEPTABLE_ARGUMENT_LENGTHS.has(node.arguments.length)) {
-          return;
+          throw new Error(
+            "Found 'match' call with unexpected number of arguments. It should receive either 1 or 2 arguments.",
+          );
         }
       }
 
