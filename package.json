@@ -3,7 +3,9 @@
   "version": "0.1.0",
   "description": "lightweight, framework-independent test snapshots",
   "main": "dist/index.js",
-  "scripts": {},
+  "scripts": {
+    "build": "rm -rf dist && tsc"
+  },
   "keywords": [
     "test",
     "snapshot",

@@ -2,8 +2,8 @@
   "include": ["./src/**/*.ts"],
 
   "compilerOptions": {
-    "lib": ["es2019", "dom"],
-    "target": "es2018",
+    "lib": ["es2021"],
+    "target": "es2021",
     "module": "CommonJS",
     "outDir": "./dist",
     "declaration": true,
