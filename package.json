@@ -22,6 +22,7 @@
     "vitest": "^1.4.0"
   },
   "dependencies": {
+    "@suchipi/error-utils": "^0.2.0",
     "equivalent-exchange": "^1.10.0",
     "error-stack-parser": "^2.1.4",
     "jest-diff": "^29.7.0",

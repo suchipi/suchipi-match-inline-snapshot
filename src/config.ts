@@ -1,3 +1,4 @@
+import type { SourceMap } from "@suchipi/error-utils";
 import type { matchInlineSnapshot } from "./match";
 import { FsDelegate, defaultFsDelegate } from "./fs-delegate";
 
@@ -47,6 +48,14 @@ export type Config = {
    * for a different implementation as needed.
    */
   fsDelegate: FsDelegate;
+
+  /**
+   * Source maps which will be used to find the location of
+   * `matchInlineSnapshot` calls.
+   */
+  sourceMaps: {
+    [filename: string]: SourceMap;
+  };
 };
 
 /**
@@ -60,4 +69,5 @@ export const config: Config = {
   shouldCreateNew: true,
   isAllowedToChangeSnapshots: true,
   fsDelegate: defaultFsDelegate,
+  sourceMaps: {},
 };
