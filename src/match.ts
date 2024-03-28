@@ -1,15 +1,11 @@
 import { getLocation } from "./get-location";
-import { update } from "./update";
+import { updateMatchSnapshotCall } from "./update";
+import { config } from "./config";
 
-export const matchConfig: {
-  shouldUpdate: boolean;
-  isCI: boolean;
-} = {
-  shouldUpdate: false,
-  isCI: false,
-};
-
-export function match(actual: string, expected: string | undefined): void {
+export function matchInlineSnapshot(
+  actual: string,
+  expected?: string | undefined,
+): void {
   const callerLocation = getLocation(1);
   if (callerLocation == null) {
     throw new Error("Could not determine caller location");
@@ -26,26 +22,30 @@ export function match(actual: string, expected: string | undefined): void {
 
   switch (outcome) {
     case "new": {
-      if (matchConfig.isCI) {
-        throw new Error(
-          "Attempting to create new snapshot in CI. This is probably a mistake.",
-        );
+      if (config.shouldCreateNew) {
+        if (config.isAllowedToChangeSnapshots) {
+          updateMatchSnapshotCall(callerLocation, actual);
+        }
       } else {
-        update(callerLocation, actual);
+        throw new Error(
+          "Attempting to create new snapshot, but config.shouldCreateNew was false.",
+        );
       }
       break;
     }
     case "pass": {
-      if (!matchConfig.isCI) {
-        // It's equivalent, but we still call update in order to, for example,
-        // change the second arg from a string literal to a template literal.
-        update(callerLocation, actual);
+      // It's equivalent, but we still call update in order to, for example,
+      // change the second arg from a string literal to a template literal.
+      if (config.isAllowedToChangeSnapshots) {
+        updateMatchSnapshotCall(callerLocation, actual);
       }
       break;
     }
     case "fail": {
-      if (matchConfig.shouldUpdate) {
-        update(callerLocation, actual);
+      if (config.shouldUpdateOutdated) {
+        if (config.isAllowedToChangeSnapshots) {
+          updateMatchSnapshotCall(callerLocation, actual);
+        }
       } else {
         const message = [
           "Snapshots didn't match.",
@@ -61,8 +61,3 @@ export function match(actual: string, expected: string | undefined): void {
     }
   }
 }
-
-export type Result = {
-  outcome: "pass" | "fail" | "new";
-  update(): void;
-};

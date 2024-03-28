@@ -11,6 +11,9 @@ export type Loc = {
 export function getLocation(stackOffsetUpwards: number): Loc | null {
   const here = new Error("inside getLocation");
   const frames = ErrorStackParser.parse(here);
+
+  // We add 1 here because the stack offset is from the perspective of the
+  // person calling getLocation, but the Error was created within getLocation.
   const targetedFrame = frames[stackOffsetUpwards + 1];
   if (targetedFrame == null) {
     return null;
