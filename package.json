@@ -4,7 +4,8 @@
   "description": "standlone 'match inline snapshot' function",
   "main": "dist/index.js",
   "scripts": {
-    "build": "rm -rf dist && tsc"
+    "build": "rm -rf dist && tsc",
+    "test": "vitest"
   },
   "keywords": [
     "test",
@@ -16,7 +17,9 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^20.11.30",
+    "first-base": "^1.4.0",
     "kame": "^0.13.0",
+    "nice-path": "^2.0.0",
     "prettier": "^3.2.5",
     "typescript": "^5.4.3",
     "vitest": "^1.4.0"
