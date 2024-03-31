@@ -9,7 +9,9 @@ export function matchInlineSnapshot(
 ): void {
   const callerLocation = getLocation(1);
   if (callerLocation == null) {
-    throw new Error("Could not determine caller location");
+    throw new Error(
+      "Could not determine caller location for matchInlineSnapshot",
+    );
   }
 
   let outcome: "new" | "pass" | "fail";
