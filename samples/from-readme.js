@@ -6,6 +6,9 @@ const { matchInlineSnapshot } = require("..");
 matchInlineSnapshot(
   `
     something
+
+    mhm
+    yeah
   `,
   `
     something else

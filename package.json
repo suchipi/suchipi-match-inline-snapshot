@@ -26,7 +26,7 @@
     "equivalent-exchange": "^1.10.0",
     "error-stack-parser": "^2.1.4",
     "jest-diff": "^29.7.0",
-    "kleur": "^4.1.5",
+    "chalk": "^4.1.2",
     "line-and-column-to-string-index": "^1.0.0"
   }
 }

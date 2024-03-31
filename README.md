@@ -13,6 +13,9 @@ import { matchInlineSnapshot } from "@suchipi/test-snapshot";
 matchInlineSnapshot(
   `
     something
+
+    mhm
+    yeah
   `,
   `
     something else

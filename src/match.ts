@@ -1,9 +1,8 @@
-import kleur from "kleur";
-import { diffStringsUnified } from "jest-diff";
 import { getLocation } from "./get-location";
 import { updateMatchSnapshotCall } from "./update";
 import { config } from "./config";
 import { ParsedError } from "@suchipi/error-utils";
+import { diff } from "./diff";
 
 export function matchInlineSnapshot(
   actual: string,
@@ -51,12 +50,9 @@ export function matchInlineSnapshot(
         }
       } else {
         const message = [
-          "Snapshots didn't match.",
+          "Received value didn't match snapshot.",
           "",
-          diffStringsUnified(expected || "", actual, {
-            aAnnotation: "Expected",
-            bAnnotation: "Actual",
-          }),
+          diff(actual, expected),
           "",
         ].join("\n");
 
