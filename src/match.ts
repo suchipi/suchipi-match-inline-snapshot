@@ -1,7 +1,6 @@
 import { getLocation } from "./get-location";
 import { updateMatchSnapshotCall } from "./update";
 import { config } from "./config";
-import { ParsedError } from "@suchipi/error-utils";
 import { diff } from "./diff";
 
 export function matchInlineSnapshot(
@@ -56,13 +55,7 @@ export function matchInlineSnapshot(
           "",
         ].join("\n");
 
-        const error = new Error(message);
-        const parsedError = new ParsedError(error);
-        // remove top stack frame so error appears to come directly from the
-        // matchInlineSnapshot call.
-        parsedError.stackFrames.shift();
-        const snapshotMismatchError = parsedError.toError();
-        throw snapshotMismatchError;
+        throw new Error(message);
       }
     }
   }
