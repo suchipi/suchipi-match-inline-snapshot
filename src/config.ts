@@ -1,6 +1,7 @@
 import type { SourceMap } from "@suchipi/error-utils";
 import type { matchInlineSnapshot } from "./match";
 import { FsDelegate, defaultFsDelegate } from "./fs-delegate";
+import { format as prettyFormat } from "pretty-format";
 
 /** Global configuration for this library. */
 export type Config = {
@@ -56,6 +57,16 @@ export type Config = {
   sourceMaps: {
     [filename: string]: SourceMap;
   };
+
+  /**
+   * Functions to pass the input value through in order to arrive at the final
+   * snapshot format.
+   *
+   * By default, this contains two functions:
+   * - [pretty-format](https://www.npmjs.com/package/pretty-format)
+   * - A function that wraps a string between newline characters, if the received string contains any newline characters.
+   */
+  serializers: Array<(actual: any) => any>;
 };
 
 /**
@@ -70,4 +81,8 @@ export const config: Config = {
   isAllowedToChangeSnapshots: true,
   fsDelegate: defaultFsDelegate,
   sourceMaps: {},
+  serializers: [
+    prettyFormat,
+    (str: string) => (str.includes("\n") ? "\n" + str + "\n" : str),
+  ],
 };

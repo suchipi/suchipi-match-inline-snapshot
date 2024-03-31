@@ -4,7 +4,7 @@ import { config } from "./config";
 import { diff } from "./diff";
 
 export function matchInlineSnapshot(
-  actual: string,
+  actual: any,
   expected?: string | undefined,
 ): void {
   const callerLocation = getLocation(1);
@@ -12,6 +12,14 @@ export function matchInlineSnapshot(
     throw new Error(
       "Could not determine caller location for matchInlineSnapshot",
     );
+  }
+
+  actual = config.serializers.reduce(
+    (prev, serializer) => serializer(prev),
+    actual,
+  );
+  if (typeof actual !== "string") {
+    actual = String(actual);
   }
 
   let outcome: "new" | "pass" | "fail";

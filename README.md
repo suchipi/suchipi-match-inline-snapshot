@@ -18,10 +18,12 @@ matchInlineSnapshot(
     yeah
   `,
   `
+"
     something else
 
     yeah
-  `,
+  "
+`,
 ); // throws Error or updates self depending on `matchInlineSnapshot.config.shouldUpdateOutdated`
 ```
 
@@ -48,6 +50,7 @@ The TypeScript type of the value `matchInlineSnapshot.config`, which is the glob
 - `isAllowedToChangeSnapshots` (boolean, default true): Whether `matchInlineSnapshot` is allowed to change snapshot content on disk at all, for any reason.
 - `fsDelegate` (object): Object containing filesystem functions which will be used to update snapshots. See "FsDelegate" heading below for more info.
 - `sourceMaps` (object): Object which you can add source maps onto in order to make snapshots work in TypeScript files and etc.
+- `serializers` (Array of Functions): Transforms to pass the input value through in order to arrive at the final snapshot format.
 
 ### `FsDelegate` (Type)
 

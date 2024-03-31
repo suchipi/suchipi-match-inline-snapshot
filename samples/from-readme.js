@@ -11,8 +11,10 @@ matchInlineSnapshot(
     yeah
   `,
   `
+"
     something else
 
     yeah
-  `,
+  "
+`,
 ); // throws Error or updates self depending on `matchInlineSnapshot.config.shouldUpdateOutdated`

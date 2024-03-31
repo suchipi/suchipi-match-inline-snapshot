@@ -23,10 +23,11 @@
   },
   "dependencies": {
     "@suchipi/error-utils": "^0.2.0",
+    "chalk": "^4.1.2",
     "equivalent-exchange": "^1.10.0",
     "error-stack-parser": "^2.1.4",
     "jest-diff": "^29.7.0",
-    "chalk": "^4.1.2",
-    "line-and-column-to-string-index": "^1.0.0"
+    "line-and-column-to-string-index": "^1.0.0",
+    "pretty-format": "^29.7.0"
   }
 }
