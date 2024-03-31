@@ -11,7 +11,7 @@ function getSnapshotColor() {
   } else if (chalk.level === 2) {
     return chalk.ansi256(90).bgAnsi256(225);
   } else {
-    return chalk.cyan.bgWhiteBright;
+    return chalk.magenta.bgYellowBright;
   }
 }
 
