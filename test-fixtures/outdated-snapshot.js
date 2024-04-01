@@ -1,5 +1,3 @@
-const { matchInlineSnapshot } = require("..");
-
 matchInlineSnapshot(
   { a: true },
   `

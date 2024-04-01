@@ -1,3 +1,5 @@
 src
 dist/**/*.test.*
 .prettierrc
+test-fixtures
+test-workdirs
