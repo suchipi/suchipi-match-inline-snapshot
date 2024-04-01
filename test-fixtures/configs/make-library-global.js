@@ -1,1 +1,1 @@
-globalThis.matchInlineSnapshot = require("../..");
+globalThis.matchInlineSnapshot = require("../..").matchInlineSnapshot;
