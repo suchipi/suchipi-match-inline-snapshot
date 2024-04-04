@@ -1,8 +1,7 @@
 import fs from "node:fs";
 import { test, beforeEach, expect } from "vitest";
 import { spawn } from "first-base";
-import { diffStringsUnified } from "jest-diff";
-import { fixturesDir, workDirs, cleanResult } from "./test-utils";
+import { fixturesDir, workDirs, cleanResult, diffStrings } from "./test-utils";
 
 const ownWorkDir = workDirs.concat("update-multi-outdated");
 
@@ -46,19 +45,7 @@ test("updates two outdated snapshots when configured to do so", async () => {
   // Updates snapshot
   expect(contentBefore).not.toBe(contentAfter);
 
-  expect(
-    diffStringsUnified(contentBefore, contentAfter, {
-      aAnnotation: "contentBefore",
-      bAnnotation: "contentAfter",
-      aColor: identity,
-      bColor: identity,
-      changeColor: identity,
-      commonColor: identity,
-      changeLineTrailingSpaceColor: identity,
-      commonLineTrailingSpaceColor: identity,
-      patchColor: identity,
-    }),
-  ).toMatchInlineSnapshot(`
+  expect(diffStrings({ contentBefore, contentAfter })).toMatchInlineSnapshot(`
     "- contentBefore
     + contentAfter
 
