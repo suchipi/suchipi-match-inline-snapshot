@@ -4,7 +4,7 @@ import { spawn } from "first-base";
 import { diffStringsUnified } from "jest-diff";
 import { fixturesDir, workDirs, cleanResult } from "./test-utils";
 
-const ownWorkDir = workDirs.concat("update-outdated");
+const ownWorkDir = workDirs.concat("update-multi-outdated");
 
 beforeEach(() => {
   if (fs.existsSync(ownWorkDir.toString())) {
@@ -13,9 +13,9 @@ beforeEach(() => {
   fs.mkdirSync(ownWorkDir.toString(), { recursive: true });
 });
 
-test("updates outdated snapshot when configured to do so", async () => {
-  const sourceFixturePath = fixturesDir.concat("outdated-snapshot.js");
-  const ownFixturePath = ownWorkDir.concat("outdated-snapshot-1.js");
+test("updates two outdated snapshots when configured to do so", async () => {
+  const sourceFixturePath = fixturesDir.concat("two-outdated-snapshot.js");
+  const ownFixturePath = ownWorkDir.concat("two-outdated-snapshot-1.js");
 
   fs.copyFileSync(sourceFixturePath.toString(), ownFixturePath.toString());
 
