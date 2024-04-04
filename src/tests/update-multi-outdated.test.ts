@@ -14,8 +14,8 @@ beforeEach(() => {
 });
 
 test("updates two outdated snapshots when configured to do so", async () => {
-  const sourceFixturePath = fixturesDir.concat("two-outdated-snapshot.js");
-  const ownFixturePath = ownWorkDir.concat("two-outdated-snapshot-1.js");
+  const sourceFixturePath = fixturesDir.concat("two-outdated-snapshots.js");
+  const ownFixturePath = ownWorkDir.concat("two-outdated-snapshots-1.js");
 
   fs.copyFileSync(sourceFixturePath.toString(), ownFixturePath.toString());
 
@@ -69,6 +69,16 @@ test("updates two outdated snapshots when configured to do so", async () => {
     -   "a": false,
     +   "a": true,
       }
+      \`,
+      );
+
+      matchInlineSnapshot(
+        { b: true },
+        \`
+    - Object {}
+    + Object {
+    +   "b": true,
+    + }
       \`,
       );
     "
