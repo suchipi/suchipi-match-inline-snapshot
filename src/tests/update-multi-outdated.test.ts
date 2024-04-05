@@ -40,8 +40,6 @@ test("updates two outdated snapshots when configured to do so", async () => {
     }
   `);
 
-  const identity = <T>(val: T) => val;
-
   // Updates snapshot
   expect(contentBefore).not.toBe(contentAfter);
 
