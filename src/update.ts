@@ -2,6 +2,7 @@ import * as ee from "equivalent-exchange";
 import { lineColumnToIndex } from "line-and-column-to-string-index";
 import type { Loc } from "./get-location";
 import { config } from "./config";
+import { changeMaps } from "./change-maps";
 
 const MATCH_SNAPSHOT_FUNCTION_NAME = "matchInlineSnapshot";
 const ACCEPTABLE_ARGUMENT_LENGTHS = new Set([1, 2]);
@@ -63,9 +64,22 @@ export function updateMatchSnapshotCall(loc: Loc, actual: string) {
     );
   }
 
-  const newCode = ee.astToCode(ast).code;
+  const result = ee.astToCode(ast, {
+    fileName: loc.fileName,
+    sourceMapFileName: loc.fileName + ".map",
+  });
 
-  if (code !== newCode) {
-    config.fsDelegate.writeUtf8ToFile(loc.fileName, newCode);
+  if (result.map == null) {
+    throw new Error(`Failed to generate change map for ${JSON.stringify(loc)}`);
+  }
+
+  console.log("update result", {
+    fileName: loc.fileName,
+    map: result.map,
+  });
+  changeMaps.insert(loc.fileName, result.map);
+
+  if (code !== result.code) {
+    config.fsDelegate.writeUtf8ToFile(loc.fileName, result.code);
   }
 }
