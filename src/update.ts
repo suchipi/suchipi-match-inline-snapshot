@@ -17,7 +17,12 @@ export function updateMatchSnapshotCall(loc: Loc, actual: string) {
     loc.columnNumber,
   );
 
-  const ast = ee.codeToAst(code);
+  const eeOptions = {
+    fileName: loc.fileName,
+    sourceMapFileName: loc.fileName + ".map",
+  };
+
+  const ast = ee.codeToAst(code, eeOptions);
   let found = false;
 
   ee.traverse(ast, {
@@ -64,10 +69,7 @@ export function updateMatchSnapshotCall(loc: Loc, actual: string) {
     );
   }
 
-  const result = ee.astToCode(ast, {
-    fileName: loc.fileName,
-    sourceMapFileName: loc.fileName + ".map",
-  });
+  const result = ee.astToCode(ast, eeOptions);
 
   if (result.map == null) {
     throw new Error(`Failed to generate change map for ${JSON.stringify(loc)}`);

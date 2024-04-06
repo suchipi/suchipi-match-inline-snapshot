@@ -3,12 +3,14 @@ import type { SourceMap } from "@suchipi/error-utils";
 const storage = new Map<string, SourceMap>();
 
 export const changeMaps = {
-  get(filename: string): SourceMap | null {
-    return storage.get(filename) || null;
+  get(fileName: string): SourceMap | null {
+    console.log("changeMaps.get", { fileName });
+    return storage.get(fileName) || null;
   },
 
-  insert(filename: string, map: SourceMap) {
-    storage.set(filename, map);
+  insert(fileName: string, map: SourceMap) {
+    console.log("changeMaps.insert", { fileName, map });
+    storage.set(fileName, map);
   },
 
   clearAll() {

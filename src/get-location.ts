@@ -2,6 +2,7 @@ import {
   getStackFrame,
   applySourceMapsToStackFrame,
 } from "@suchipi/error-utils";
+import { SourceMapConsumer } from "source-map";
 import { config } from "./config";
 import { changeMaps } from "./change-maps";
 
@@ -32,17 +33,16 @@ export function getLocation(stackOffsetUpwards: number): Loc | null {
 
   const changeMap = changeMaps.get(fileName);
   if (changeMap != null) {
-    const changeMappedFrame = applySourceMapsToStackFrame(
-      { [fileName]: changeMap },
-      sourceMappedFrame,
-    );
-    console.log("change mapped frame: ", changeMappedFrame);
-    lineNumber = changeMappedFrame.lineNumber;
-    columnNumber = changeMappedFrame.columnNumber;
+    const consumer = new SourceMapConsumer(changeMap as any);
+    const newPos = consumer.originalPositionFor({
+      line: lineNumber,
+      column: columnNumber,
+    });
 
-    if (lineNumber == null || columnNumber == null) {
-      return null;
-    }
+    console.log({ newPos });
+
+    lineNumber = newPos.line;
+    columnNumber = newPos.column;
   }
 
   return {
