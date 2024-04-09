@@ -1,7 +1,7 @@
 import * as ee from "equivalent-exchange";
 import { lineColumnToIndex } from "line-and-column-to-string-index";
 import type { Loc } from "./get-location";
-import { config } from "./config";
+import { getFile, queueFlushState } from "./ast-state";
 
 const MATCH_SNAPSHOT_FUNCTION_NAME = "matchInlineSnapshot";
 const ACCEPTABLE_ARGUMENT_LENGTHS = new Set([1, 2]);
@@ -9,17 +9,17 @@ const ACTUAL_ARG_INDEX = 0;
 const EXPECTED_ARG_INDEX = 1;
 
 export function updateMatchSnapshotCall(loc: Loc, actual: string) {
-  const code = config.fsDelegate.readFileAsUtf8(loc.fileName);
+  const file = getFile(loc.fileName);
+
   const locIndex = lineColumnToIndex(
-    code,
+    file.content,
     loc.lineNumber - 1,
     loc.columnNumber,
   );
 
-  const ast = ee.codeToAst(code);
   let found = false;
 
-  ee.traverse(ast, {
+  ee.traverse(file.ast, {
     CallExpression(nodePath) {
       const node = nodePath.node;
 
@@ -63,9 +63,5 @@ export function updateMatchSnapshotCall(loc: Loc, actual: string) {
     );
   }
 
-  const newCode = ee.astToCode(ast).code;
-
-  if (code !== newCode) {
-    config.fsDelegate.writeUtf8ToFile(loc.fileName, newCode);
-  }
+  queueFlushState();
 }

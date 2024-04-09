@@ -1,4 +1,5 @@
 import type { SourceMap } from "@suchipi/error-utils";
+import type { ParseOptions } from "equivalent-exchange";
 import type { matchInlineSnapshot } from "./match";
 import { FsDelegate, defaultFsDelegate } from "./fs-delegate";
 import { format as prettyFormat } from "pretty-format";
@@ -67,6 +68,14 @@ export type Config = {
    * - A function that wraps a string between newline characters, if the received string contains any newline characters.
    */
   serializers: Array<(actual: any) => any>;
+
+  /**
+   * Options for the AST parser used to locate {@link matchInlineSnapshot}
+   * calls. In most cases, you won't need to change these from the defaults.
+   */
+  parserOptions: ParseOptions;
+
+  // TODO: flush method
 };
 
 /**
@@ -85,4 +94,5 @@ export const config: Config = {
     prettyFormat,
     (str: string) => (str.includes("\n") ? "\n" + str + "\n" : str),
   ],
+  parserOptions: {},
 };
