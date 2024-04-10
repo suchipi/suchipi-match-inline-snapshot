@@ -1,0 +1,1 @@
+matchInlineSnapshot.config.updateScheduling = "manual";

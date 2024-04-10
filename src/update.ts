@@ -1,6 +1,7 @@
 import * as ee from "equivalent-exchange";
 import { lineColumnToIndex } from "line-and-column-to-string-index";
 import type { Loc } from "./get-location";
+import { config } from "./config";
 import { getFile, queueFlushState } from "./ast-state";
 
 const MATCH_SNAPSHOT_FUNCTION_NAME = "matchInlineSnapshot";
@@ -63,5 +64,7 @@ export function updateMatchSnapshotCall(loc: Loc, actual: string) {
     );
   }
 
-  queueFlushState();
+  if (config.updateScheduling === "auto") {
+    queueFlushState();
+  }
 }

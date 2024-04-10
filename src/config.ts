@@ -75,7 +75,19 @@ export type Config = {
    */
   parserOptions: ParseOptions;
 
-  // TODO: flush method
+  /**
+   * Option which controls when snapshot updates get written back to disk.
+   *
+   * - If set to "auto", snapshots will be updated shortly after the
+   *   {@link matchInlineSnapshot} call(s), in a `setTimeout(..., 0)`.
+   * - If set to "manual", snapshots won't be updated until you call
+   *   `matchInlineSnapshot.flushUpdates`.
+   *
+   * Defaults to "auto", which is probably good enough for one-off scripts. Test
+   * frameworks and other more-involved applications should probably use
+   * "manual" instead.
+   */
+  updateScheduling: "auto" | "manual";
 };
 
 /**
@@ -95,4 +107,5 @@ export const config: Config = {
     (str: string) => (str.includes("\n") ? "\n" + str + "\n" : str),
   ],
   parserOptions: {},
+  updateScheduling: "auto",
 };
