@@ -68,3 +68,49 @@ test("updates the wrapped call instead of the normal call", async () => {
     "
   `);
 });
+
+test("the error message still makes sense", async () => {
+  const sourceFixturePath = fixturesDir.concat("custom-call.js");
+  const ownFixturePath = ownWorkDir.concat("custom-call-2.js");
+
+  fs.copyFileSync(sourceFixturePath.toString(), ownFixturePath.toString());
+
+  const contentBefore = fs.readFileSync(ownFixturePath.toString(), "utf-8");
+
+  const run = spawn("node", [
+    "-r",
+    fixturesDir.concat("configs/make-library-global.js").toString(),
+    "-r",
+    fixturesDir.concat("configs/custom-call-structure.js").toString(),
+    ownFixturePath.toString(),
+  ]);
+  await run.completion;
+
+  const contentAfter = fs.readFileSync(ownFixturePath.toString(), "utf-8");
+
+  expect(cleanResult(run.result)).toMatchInlineSnapshot(`
+    {
+      "code": 1,
+      "error": false,
+      "stderr": "<rootDir>/dist/match.js:60
+                    throw new Error(message);
+                    ^
+
+    Error: Received value didn't match snapshot.
+
+    - Snapshot  - 1
+    + Received  + 1
+
+    - 9
+    + 5
+        at somewhere
+
+    Node.js v20.11.1
+    ",
+      "stdout": "",
+    }
+  `);
+
+  // Doesn't update snapshot
+  expect(contentBefore).toBe(contentAfter);
+});
