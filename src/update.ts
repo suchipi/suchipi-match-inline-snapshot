@@ -4,12 +4,9 @@ import type { Loc } from "./get-location";
 import { config } from "./config";
 import { getFile, queueFlushState } from "./ast-state";
 
-const MATCH_SNAPSHOT_FUNCTION_NAME = "matchInlineSnapshot";
-const ACCEPTABLE_ARGUMENT_LENGTHS = new Set([1, 2]);
-const ACTUAL_ARG_INDEX = 0;
-const EXPECTED_ARG_INDEX = 1;
-
 export function updateMatchSnapshotCall(loc: Loc, actual: string) {
+  const cs = config.callStructure;
+
   const file = getFile(loc.fileName);
 
   const locIndex = lineColumnToIndex(
@@ -36,22 +33,24 @@ export function updateMatchSnapshotCall(loc: Loc, actual: string) {
       }
 
       if (
-        ee.hasShape(node, {
-          callee: {
-            type: "Identifier",
-            name: MATCH_SNAPSHOT_FUNCTION_NAME,
-          },
+        !ee.hasShape(node, {
+          callee: cs.callee,
         })
       ) {
-        if (!ACCEPTABLE_ARGUMENT_LENGTHS.has(node.arguments.length)) {
-          throw new Error(
-            `Found 'match' call with unexpected number of arguments. Acceptable arguments lengths are: ${Array.from(ACCEPTABLE_ARGUMENT_LENGTHS.values()).join(", ")}`,
-          );
-        }
+        return;
+      }
+
+      if (
+        node.arguments.length > cs.arguments.length.max ||
+        node.arguments.length < cs.arguments.length.min
+      ) {
+        throw new Error(
+          `Found match inline snapshot call with unexpected number of arguments. There must be between ${cs.arguments.length.min} and ${cs.arguments.length.max} arguments, but there were ${node.arguments.length} at the callsite`,
+        );
       }
 
       found = true;
-      node.arguments[EXPECTED_ARG_INDEX] = ee.types.templateLiteral(
+      node.arguments[cs.arguments.snapshotIndex] = ee.types.templateLiteral(
         [ee.types.templateElement({ raw: actual })],
         [],
       );
@@ -60,7 +59,7 @@ export function updateMatchSnapshotCall(loc: Loc, actual: string) {
 
   if (!found) {
     throw new Error(
-      `Could not find ${JSON.stringify(MATCH_SNAPSHOT_FUNCTION_NAME)} call at ${JSON.stringify(loc)}`,
+      `Could not find match inline snapshot call at ${JSON.stringify(loc)}. If you've wrapped matchInlineSnapshot with a helper function, make sure to increment matchInlineSnapshot.config.callStructure.stackOffset.`,
     );
   }
 

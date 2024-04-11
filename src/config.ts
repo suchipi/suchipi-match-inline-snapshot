@@ -3,6 +3,7 @@ import type { ParseOptions } from "equivalent-exchange";
 import type { matchInlineSnapshot } from "./match";
 import { FsDelegate, defaultFsDelegate } from "./fs-delegate";
 import { format as prettyFormat } from "pretty-format";
+import { CallStructure, defaultCallStructure } from "./call-structure";
 
 /** Global configuration for this library. */
 export type Config = {
@@ -88,6 +89,24 @@ export type Config = {
    * "manual" instead.
    */
   updateScheduling: "auto" | "manual";
+
+  /**
+   * Option which controls which AST code structure will be targeted by the
+   * update system.
+   *
+   * By default, it looks for code like:
+   * ```ts
+   * matchInlineSnapshot(something, somethingElse);
+   * ```
+   * but you could configure this option to make it instead look for (as an
+   * example):
+   * ```ts
+   * expect(something).toMatchInlineSnapshot(somethingElse);
+   * ```
+   *
+   * See the doc comments on the {@link CallStructure} type for more info.
+   */
+  callStructure: CallStructure;
 };
 
 /**
@@ -108,4 +127,5 @@ export const config: Config = {
   ],
   parserOptions: {},
   updateScheduling: "auto",
+  callStructure: defaultCallStructure,
 };

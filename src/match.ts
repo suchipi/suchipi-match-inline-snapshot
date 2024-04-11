@@ -7,7 +7,7 @@ export function matchInlineSnapshot(
   actual: any,
   expected?: string | undefined,
 ): void {
-  const callerLocation = getLocation(1);
+  const callerLocation = getLocation(1 + config.callStructure.stackOffset);
   if (callerLocation == null) {
     throw new Error(
       "Could not determine caller location for matchInlineSnapshot",
