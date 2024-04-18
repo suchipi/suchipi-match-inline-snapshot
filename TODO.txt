@@ -7,3 +7,4 @@
 - [ ] indent snapshots
   - part of this is making snapshots with arbitrary indentation still match.
 - [ ] run prettier after updating snapshots if they have prettier configured.
+- [ ] runtime type validation of all the config stuff

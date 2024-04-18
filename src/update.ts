@@ -1,12 +1,14 @@
 import * as ee from "equivalent-exchange";
 import { lineColumnToIndex } from "line-and-column-to-string-index";
+import get from "lodash/get";
+import set from "lodash/set";
 import type { Loc } from "./get-location";
 import { config } from "./config";
 import { getFile, queueFlushState } from "./ast-state";
 
-export function updateMatchSnapshotCall(loc: Loc, actual: string) {
-  const cs = config.callStructure;
+const EMPTY = Symbol("EMPTY");
 
+export function updateMatchSnapshotCall(loc: Loc, actual: string) {
   const file = getFile(loc.fileName);
 
   const locIndex = lineColumnToIndex(
@@ -15,44 +17,49 @@ export function updateMatchSnapshotCall(loc: Loc, actual: string) {
     loc.columnNumber,
   );
 
-  let found = false;
+  const cs = config.callStructure;
 
+  let found = false;
   ee.traverse(file.ast, {
-    CallExpression(nodePath) {
+    enter(nodePath) {
       const node = nodePath.node;
 
-      const nodeStart = node.loc!.start.index;
-      const nodeEnd = node.loc!.end.index;
-
-      if (locIndex > nodeEnd) {
-        return;
-      }
-
-      if (locIndex < nodeStart) {
-        return;
-      }
+      const nodeStart = node.loc?.start.index;
+      const nodeEnd = node.loc?.end.index;
 
       if (
-        !ee.hasShape(node, {
-          callee: cs.callee,
-        })
+        nodeStart == null ||
+        nodeEnd == null ||
+        locIndex > nodeEnd ||
+        locIndex < nodeStart
       ) {
         return;
       }
 
-      if (
-        node.arguments.length > cs.arguments.length.max ||
-        node.arguments.length < cs.arguments.length.min
-      ) {
-        throw new Error(
-          `Found match inline snapshot call with unexpected number of arguments. There must be between ${cs.arguments.length.min} and ${cs.arguments.length.max} arguments, but there were ${node.arguments.length} at the callsite`,
-        );
+      if (!ee.hasShape(node, cs.astPattern)) {
+        return;
       }
 
       found = true;
-      node.arguments[cs.arguments.snapshotIndex] = ee.types.templateLiteral(
-        [ee.types.templateElement({ raw: actual })],
-        [],
+
+      const snapshotParentOrArray = get(
+        node,
+        cs.snapshotPath.slice(0, -1),
+        EMPTY,
+      );
+      if (snapshotParentOrArray === EMPTY) {
+        throw new Error(
+          `Attempting to insert snapshot into AST at path ${cs.snapshotPath.join(".")}, but one or more of the intermediate objects along that path was null or undefined. Please verify that matchInlineSnapshot.config.callStructure is correct.`,
+        );
+      }
+
+      set(
+        node,
+        cs.snapshotPath,
+        ee.types.templateLiteral(
+          [ee.types.templateElement({ raw: actual })],
+          [],
+        ),
       );
     },
   });

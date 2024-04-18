@@ -16,6 +16,7 @@
   "author": "Lily Skye <me@suchipi.com>",
   "license": "MIT",
   "devDependencies": {
+    "@types/lodash": "^4.17.0",
     "@types/node": "^20.11.30",
     "first-base": "^1.4.0",
     "kame": "^0.13.0",
@@ -31,6 +32,7 @@
     "error-stack-parser": "^2.1.4",
     "jest-diff": "^29.7.0",
     "line-and-column-to-string-index": "^1.0.0",
+    "lodash": "^4.17.21",
     "pretty-format": "^29.7.0"
   }
 }

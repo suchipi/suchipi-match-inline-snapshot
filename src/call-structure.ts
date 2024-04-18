@@ -1,48 +1,33 @@
-import ee, { types as t } from "equivalent-exchange";
-
 export type CallStructure = {
   /**
-   * The AST structure which gets called (ie, the part of the code before the
-   * call parens).
+   * The AST pattern which represents a match-inline-snapshot call.
    *
-   * By default, this is `{ type: "Identifier", name: "matchInlineSnapshot" }`.
+   * By default, this is:
+   *
+   * ```json
+   * {
+   *   type: "CallExpression",
+   *   callee: {
+   *     type: "Identifier",
+   *     name: "matchInlineSnapshot"
+   *   }
+   * }
+   * ```
    *
    * You can change this to make the snapshot update system target a different
    * code pattern.
    */
-  callee: ee.types.Node;
+  astPattern: { [key: string]: any };
 
   /**
-   * Configuration options relating to the arguments passed to the match
-   * snapshot call.
+   * The property path to the snapshot node, starting from the
+   * configured `astPattern`.
+   *
+   * By default, this is `["arguments", 1]`.
+   *
+   * This controls where the snapshot template literal string gets placed.
    */
-  arguments: {
-    /**
-     * Constraints on the allowed number of arguments.
-     */
-    length: {
-      /**
-       * There must be at least this many arguments in the call.
-       *
-       * Defaults to `1`.
-       */
-      min: number;
-      /**
-       * There may be no more than this many arguments in the call.
-       *
-       * Defaults to `2`.
-       */
-      max: number;
-    };
-
-    /**
-     * 0-based index of which argument contains the snapshot string that gets
-     * programmatically updated.
-     *
-     * Defaults to `1` (ie the second argument).
-     */
-    snapshotIndex: number;
-  };
+  snapshotPath: Array<string | number>;
 
   /**
    * How many call stack frames away the call-structure-to-update is from the
@@ -57,10 +42,13 @@ export type CallStructure = {
 };
 
 export const defaultCallStructure: CallStructure = {
-  callee: t.identifier("matchInlineSnapshot"),
-  arguments: {
-    length: { min: 1, max: 2 },
-    snapshotIndex: 1,
+  astPattern: {
+    type: "CallExpression",
+    callee: {
+      type: "Identifier",
+      name: "matchInlineSnapshot",
+    },
   },
+  snapshotPath: ["arguments", 1],
   stackOffset: 0,
 };
