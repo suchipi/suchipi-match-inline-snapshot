@@ -2,7 +2,7 @@ import {
   getStackFrame,
   applySourceMapsToStackFrame,
 } from "@suchipi/error-utils";
-import { config } from "./config";
+import { validateConfig } from "./config";
 
 // it's named Loc instead of Location so that TypeScript doesn't mix it up with
 // the dom 'Location' class if you forget to import it
@@ -13,6 +13,8 @@ export type Loc = {
 };
 
 export function getLocation(stackOffsetUpwards: number): Loc | null {
+  const config = validateConfig();
+
   // We add 1 here because the stack offset is from the perspective of the
   // person calling getLocation, but our call to getStackFrame is within
   // getLocation.

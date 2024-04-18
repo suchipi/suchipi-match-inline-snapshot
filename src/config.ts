@@ -1,9 +1,14 @@
+import * as t from "pheno";
 import type { SourceMap } from "@suchipi/error-utils";
 import type { ParseOptions } from "equivalent-exchange";
 import type { matchInlineSnapshot } from "./match";
-import { FsDelegate, defaultFsDelegate } from "./fs-delegate";
+import { FsDelegate, defaultFsDelegate, t_FsDelegate } from "./fs-delegate";
 import { format as prettyFormat } from "pretty-format";
-import { CallStructure, defaultCallStructure } from "./call-structure";
+import {
+  CallStructure,
+  defaultCallStructure,
+  t_CallStructure,
+} from "./call-structure";
 
 /** Global configuration for this library. */
 export type Config = {
@@ -109,13 +114,26 @@ export type Config = {
   callStructure: CallStructure;
 };
 
+export const t_Config: t.TypeValidator<Config> =
+  t.objectWithOnlyTheseProperties({
+    shouldUpdateOutdated: t.boolean,
+    shouldCreateNew: t.boolean,
+    isAllowedToChangeSnapshots: t.boolean,
+    fsDelegate: t_FsDelegate,
+    sourceMaps: t.anyObject,
+    serializers: t.arrayOf(t.anyFunction),
+    parserOptions: t.anyObject,
+    updateScheduling: t.or(t.exactString("auto"), t.exactString("manual")),
+    callStructure: t_CallStructure,
+  });
+
 /**
  * Controls the behavior of {@link matchInlineSnapshot}. Change these properties
  * (ie. mutate this object) as needed.
  *
  * This config is global and can be changed on the fly.
  */
-export const config: Config = {
+export const __configRaw: Config = {
   shouldUpdateOutdated: false,
   shouldCreateNew: true,
   isAllowedToChangeSnapshots: true,
@@ -129,3 +147,8 @@ export const config: Config = {
   updateScheduling: "auto",
   callStructure: defaultCallStructure,
 };
+
+export function validateConfig(): Config {
+  t.assertType(__configRaw, t_Config);
+  return __configRaw;
+}

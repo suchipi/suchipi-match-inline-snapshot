@@ -1,3 +1,5 @@
+import * as t from "pheno";
+
 export type CallStructure = {
   /**
    * The AST pattern which represents a match-inline-snapshot call.
@@ -40,6 +42,13 @@ export type CallStructure = {
    */
   stackOffset: number;
 };
+
+export const t_CallStructure: t.TypeValidator<CallStructure> =
+  t.objectWithOnlyTheseProperties({
+    astPattern: t.objectWithProperties({ type: t.string }),
+    snapshotPath: t.arrayOf(t.or(t.string, t.number)),
+    stackOffset: t.number,
+  });
 
 export const defaultCallStructure: CallStructure = {
   astPattern: {

@@ -1,4 +1,4 @@
-import { config, Config } from "./config";
+import { __configRaw, Config } from "./config";
 import type { FsDelegate } from "./fs-delegate";
 import { matchInlineSnapshot as match } from "./match";
 import { flushState } from "./ast-state";
@@ -11,7 +11,7 @@ export const matchInlineSnapshot = Object.assign(match, {
    * of your program. Changes will affect all subsequent calls to
    * `matchInlineSnapshot`.
    */
-  config,
+  config: __configRaw,
   /**
    * When `config.updateScheduling` is set to "manual", call this function to
    * write updates to disk.

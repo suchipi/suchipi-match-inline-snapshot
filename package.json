@@ -33,6 +33,7 @@
     "jest-diff": "^29.7.0",
     "line-and-column-to-string-index": "^1.0.0",
     "lodash": "^4.17.21",
+    "pheno": "^0.12.0",
     "pretty-format": "^29.7.0"
   }
 }

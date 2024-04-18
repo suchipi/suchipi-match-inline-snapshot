@@ -1,12 +1,14 @@
 import { getLocation } from "./get-location";
 import { updateMatchSnapshotCall } from "./update";
-import { config } from "./config";
+import { validateConfig } from "./config";
 import { diff } from "./diff";
 
 export function matchInlineSnapshot(
   actual: any,
   expected?: string | undefined,
 ): void {
+  const config = validateConfig();
+
   const callerLocation = getLocation(1 + config.callStructure.stackOffset);
   if (callerLocation == null) {
     throw new Error(

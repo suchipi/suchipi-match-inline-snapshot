@@ -3,12 +3,14 @@ import { lineColumnToIndex } from "line-and-column-to-string-index";
 import get from "lodash/get";
 import set from "lodash/set";
 import type { Loc } from "./get-location";
-import { config } from "./config";
+import { validateConfig } from "./config";
 import { getFile, queueFlushState } from "./ast-state";
 
 const EMPTY = Symbol("EMPTY");
 
 export function updateMatchSnapshotCall(loc: Loc, actual: string) {
+  const config = validateConfig();
+
   const file = getFile(loc.fileName);
 
   const locIndex = lineColumnToIndex(

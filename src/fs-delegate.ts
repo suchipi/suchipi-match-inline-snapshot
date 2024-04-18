@@ -1,10 +1,11 @@
 import * as fs from "node:fs";
+import * as t from "pheno";
 import type { matchInlineSnapshot } from "./match";
-import type { config } from "./config";
+import type { __configRaw } from "./config";
 
 /**
  * An object that {@link matchInlineSnapshot} will use to interact with the
- * filesystem. You set it in {@link config}.
+ * filesystem. You set it in {@link __configRaw}.
  */
 export type FsDelegate = {
   readFileAsUtf8(filename: string): string;
@@ -19,3 +20,10 @@ export const defaultFsDelegate: FsDelegate = {
     fs.writeFileSync(filename, content);
   },
 };
+
+export const t_FsDelegate: t.TypeValidator<FsDelegate> = t.objectWithProperties(
+  {
+    readFileAsUtf8: t.anyFunction,
+    writeUtf8ToFile: t.anyFunction,
+  },
+);
