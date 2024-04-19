@@ -3,13 +3,19 @@ import { updateMatchSnapshotCall } from "./update";
 import { validateConfig } from "./config";
 import { diff } from "./diff";
 
-export function matchInlineSnapshot(
+export function matchInlineSnapshotInternal(
   actual: any,
-  expected?: string | undefined,
+  expected: string | undefined,
+  forceUpdate: boolean,
 ): void {
   const config = validateConfig();
 
-  const callerLocation = getLocation(1 + config.callStructure.stackOffset);
+  const stackOffset = forceUpdate
+    ? config.callStructures.forceUpdate.stackOffset
+    : config.callStructures.normal.stackOffset;
+
+  // We add `2` here because `matchInlineSnapshotInternal` gets called by `matchInlineSnapshot`.
+  const callerLocation = getLocation(2 + stackOffset);
   if (callerLocation == null) {
     throw new Error(
       "Could not determine caller location for matchInlineSnapshot",
@@ -37,7 +43,7 @@ export function matchInlineSnapshot(
     case "new": {
       if (config.shouldCreateNew) {
         if (config.isAllowedToChangeSnapshots) {
-          updateMatchSnapshotCall(callerLocation, actual);
+          updateMatchSnapshotCall(callerLocation, actual, forceUpdate);
         }
       } else {
         throw new Error(
@@ -50,20 +56,20 @@ export function matchInlineSnapshot(
       // It's equivalent, but we still call update in order to, for example,
       // change the second arg from a string literal to a template literal.
       if (config.isAllowedToChangeSnapshots) {
-        updateMatchSnapshotCall(callerLocation, actual);
+        updateMatchSnapshotCall(callerLocation, actual, forceUpdate);
       }
       break;
     }
     case "fail": {
-      if (config.shouldUpdateOutdated) {
+      if (config.shouldUpdateOutdated || forceUpdate) {
         if (config.isAllowedToChangeSnapshots) {
-          updateMatchSnapshotCall(callerLocation, actual);
+          updateMatchSnapshotCall(callerLocation, actual, forceUpdate);
         }
       } else {
         const message = [
           "Received value didn't match snapshot.",
           "",
-          diff(actual, expected),
+          diff(String(actual), String(expected)),
           "",
         ].join("\n");
 

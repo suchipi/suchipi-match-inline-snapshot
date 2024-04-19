@@ -61,3 +61,22 @@ export const defaultCallStructure: CallStructure = {
   snapshotPath: ["arguments", 1],
   stackOffset: 0,
 };
+
+export const defaultUpdateCallStructure: CallStructure = {
+  astPattern: {
+    type: "CallExpression",
+    callee: {
+      type: "MemberExpression",
+      object: {
+        type: "Identifier",
+        name: "matchInlineSnapshot",
+      },
+      property: {
+        type: "Identifier",
+        name: "u",
+      },
+    },
+  },
+  snapshotPath: ["arguments", 1],
+  stackOffset: 0,
+};

@@ -1,4 +1,4 @@
-matchInlineSnapshot.config.callStructure = {
+matchInlineSnapshot.config.callStructures.normal = {
   astPattern: {
     type: "CallExpression",
     callee: {

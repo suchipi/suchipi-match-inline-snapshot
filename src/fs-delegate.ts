@@ -1,10 +1,10 @@
 import * as fs from "node:fs";
 import * as t from "pheno";
-import type { matchInlineSnapshot } from "./match";
+import type { matchInlineSnapshotInternal } from "./match";
 import type { __configRaw } from "./config";
 
 /**
- * An object that {@link matchInlineSnapshot} will use to interact with the
+ * An object that {@link matchInlineSnapshotInternal} will use to interact with the
  * filesystem. You set it in {@link __configRaw}.
  */
 export type FsDelegate = {

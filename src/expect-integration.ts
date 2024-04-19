@@ -29,7 +29,7 @@ export function installExpectIntegration(
   expect: typeof import("expect").expect,
   matchInlineSnapshot: typeof import(".").matchInlineSnapshot,
 ) {
-  matchInlineSnapshot.config.callStructure = expectCallStructure;
+  matchInlineSnapshot.config.callStructures.normal = expectCallStructure;
 
   expect.extend({
     toMatchInlineSnapshot(actual, snapshot) {

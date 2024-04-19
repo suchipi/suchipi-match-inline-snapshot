@@ -5,10 +5,15 @@ import set from "lodash/set";
 import type { Loc } from "./get-location";
 import { validateConfig } from "./config";
 import { getFile, queueFlushState } from "./ast-state";
+import { CallStructure } from "./call-structure";
 
 const EMPTY = Symbol("EMPTY");
 
-export function updateMatchSnapshotCall(loc: Loc, actual: string) {
+export function updateMatchSnapshotCall(
+  loc: Loc,
+  actual: string,
+  forceUpdate: boolean,
+) {
   const config = validateConfig();
 
   const file = getFile(loc.fileName);
@@ -19,7 +24,12 @@ export function updateMatchSnapshotCall(loc: Loc, actual: string) {
     loc.columnNumber,
   );
 
-  const cs = config.callStructure;
+  let cs: CallStructure;
+  if (forceUpdate) {
+    cs = config.callStructures.forceUpdate;
+  } else {
+    cs = config.callStructures.normal;
+  }
 
   let found = false;
   ee.traverse(file.ast, {
