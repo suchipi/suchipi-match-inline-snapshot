@@ -3,7 +3,7 @@
     - [x] default flush impl should use setTimeout 0, but there should be a way to disable that and manually flush (for test framework integration).
 - [ ] make `matchInlineSnapshot.u` a way of updating a single snapshot quickly
 - [x] add a way to hook into the common `expect(a).toMatchInlineSnapshot(b)` signature. maybe support both by default?
-  - [ ] add a test for that case specifically
+  - [x] add a test for that case specifically
 - [ ] indent snapshots
   - part of this is making snapshots with arbitrary indentation still match.
 - [ ] run prettier after updating snapshots if they have prettier configured.
