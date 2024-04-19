@@ -49,12 +49,6 @@ test("updates the wrapped call instead of the normal call", async () => {
     "- contentBefore
     + contentAfter
 
-      const stuff = {
-        match(snapshot, options, value = 5) {
-          matchInlineSnapshot(value, snapshot);
-        },
-      };
-
     - stuff.match();
     + stuff.match(\`5\`);
 

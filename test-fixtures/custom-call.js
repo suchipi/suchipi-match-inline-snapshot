@@ -1,9 +1,3 @@
-const stuff = {
-  match(snapshot, options, value = 5) {
-    matchInlineSnapshot(value, snapshot);
-  },
-};
-
 stuff.match();
 
 // anotha one

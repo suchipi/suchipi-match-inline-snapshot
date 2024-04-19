@@ -16,3 +16,9 @@ matchInlineSnapshot.config.callStructure = {
   snapshotPath: ["arguments", 0],
   stackOffset: 1,
 };
+
+globalThis.stuff = {
+  match(snapshot, options, value = 5) {
+    matchInlineSnapshot(value, snapshot);
+  },
+};
