@@ -2,6 +2,7 @@ import { __configRaw, Config } from "./config";
 import type { FsDelegate } from "./fs-delegate";
 import { matchInlineSnapshot as match } from "./match";
 import { flushState } from "./ast-state";
+export { installExpectIntegration } from "./expect-integration";
 
 export type { Config, FsDelegate };
 
