@@ -49,7 +49,10 @@ export function flushState() {
 
   for (const [fileName, file] of state) {
     const result = ee.astToCode(file.ast, { ...eeOptions, fileName });
-    config.fsDelegate.writeUtf8ToFile(fileName, result.code);
+    const existingCode = config.fsDelegate.readFileAsUtf8(fileName);
+    if (existingCode !== result.code) {
+      config.fsDelegate.writeUtf8ToFile(fileName, result.code);
+    }
     state.delete(fileName);
   }
 }
