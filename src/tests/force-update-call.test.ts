@@ -38,7 +38,21 @@ test("matchInlineSnapshot.u can be used to update snapshots even when shouldUpda
     {
       "code": 0,
       "error": false,
-      "stderr": "",
+      "stderr": "Error: Attempting to create new snapshot, but config.shouldCreateNew was false.
+        at somewhere
+    Error: Received value didn't match snapshot.
+
+    - Snapshot  - 1
+    + Received  + 5
+
+    - 4
+    +
+    + Object {
+    +   "a": true,
+    + }
+    +
+        at somewhere
+    ",
       "stdout": "",
     }
   `);
@@ -50,22 +64,36 @@ test("matchInlineSnapshot.u can be used to update snapshots even when shouldUpda
     "- contentBefore
     + contentAfter
 
-    - matchInlineSnapshot({ a: true });
-    + matchInlineSnapshot({ a: true }, \`
-    + Object {
-    +   "a": true,
-    + }
-    + \`);
+      matchInlineSnapshot.config.shouldCreateNew = false;
 
-      matchInlineSnapshot.u(
-        { b: true },
-        \`
-    - Object {}
+      function tryAndLog(cb) {
+        try {
+          cb();
+        } catch (err) {
+          console.error(err);
+        }
+      }
+
+      tryAndLog(() => {
+        matchInlineSnapshot({ a: true });
+      });
+
+      tryAndLog(() => {
+        matchInlineSnapshot({ a: true }, "4");
+      });
+
+      tryAndLog(() => {
+        matchInlineSnapshot.u(
+          { b: true },
+          \`
+    -   Object {}
     + Object {
+    -   \`,
     +   "b": true,
     + }
-      \`,
-      );
+    + \`,
+        );
+      });
     "
   `);
 });

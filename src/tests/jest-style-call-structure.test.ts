@@ -90,7 +90,7 @@ test("the error message still makes sense", async () => {
     {
       "code": 1,
       "error": false,
-      "stderr": "<rootDir>/dist/match.js:65
+      "stderr": "<rootDir>/dist/match.js:77
                     throw new Error(message);
                     ^
 

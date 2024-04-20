@@ -1,8 +1,26 @@
-matchInlineSnapshot({ a: true });
+matchInlineSnapshot.config.shouldCreateNew = false;
 
-matchInlineSnapshot.u(
-  { b: true },
-  `
-Object {}
-`,
-);
+function tryAndLog(cb) {
+  try {
+    cb();
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+tryAndLog(() => {
+  matchInlineSnapshot({ a: true });
+});
+
+tryAndLog(() => {
+  matchInlineSnapshot({ a: true }, "4");
+});
+
+tryAndLog(() => {
+  matchInlineSnapshot.u(
+    { b: true },
+    `
+  Object {}
+  `,
+  );
+});
