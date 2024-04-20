@@ -1,8 +1,7 @@
 - [x] seems you have to run multiple times to update multiple snapshots.
   - [x] need to get all changes for that file in one place and flush them afterwards.
     - [x] default flush impl should use setTimeout 0, but there should be a way to disable that and manually flush (for test framework integration).
-- [-] make `matchInlineSnapshot.u` a way of updating a single snapshot quickly
-  - [ ] mostly done, but `force-update-call.test.ts` shows it updating all of them, not just that one
+- [x] make `matchInlineSnapshot.u` a way of updating a single snapshot quickly
 - [x] add a way to hook into the common `expect(a).toMatchInlineSnapshot(b)` signature. maybe support both by default?
   - [x] add a test for that case specifically
 - [ ] indent snapshots
