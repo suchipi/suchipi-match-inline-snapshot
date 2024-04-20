@@ -3,11 +3,16 @@ import { updateMatchSnapshotCall } from "./update";
 import { validateConfig } from "./config";
 import { diff } from "./diff";
 
+import makeDebug from "debug";
+const debug = makeDebug("@suchipi/test-snapshot:match");
+
 export function matchInlineSnapshotInternal(
   actual: any,
   expected: string | undefined,
   forceUpdate: boolean,
 ): void {
+  debug("matchInlineSnapshotInternal called");
+
   const config = validateConfig();
 
   const stackOffset = forceUpdate
@@ -22,6 +27,7 @@ export function matchInlineSnapshotInternal(
     );
   }
 
+  debug("running snapshot serializers");
   actual = config.serializers.reduce(
     (prev, serializer) => serializer(prev),
     actual,
@@ -30,6 +36,7 @@ export function matchInlineSnapshotInternal(
     actual = String(actual);
   }
 
+  debug("comparing snapshot");
   let outcome: "new" | "pass" | "fail";
   if (typeof expected === "undefined") {
     outcome = "new";
@@ -39,10 +46,13 @@ export function matchInlineSnapshotInternal(
     outcome = "fail";
   }
 
+  debug("comparison result:", outcome);
+
   switch (outcome) {
     case "new": {
       if (config.shouldCreateNew) {
         if (config.isAllowedToChangeSnapshots) {
+          debug("creating new snapshot");
           updateMatchSnapshotCall(callerLocation, actual, forceUpdate);
         }
       } else {
@@ -56,6 +66,7 @@ export function matchInlineSnapshotInternal(
       // It's equivalent, but we still call update in order to, for example,
       // change the second arg from a string literal to a template literal.
       if (config.isAllowedToChangeSnapshots) {
+        debug("updating passing snapshot (in case that affects output)");
         updateMatchSnapshotCall(callerLocation, actual, forceUpdate);
       }
       break;
@@ -63,6 +74,7 @@ export function matchInlineSnapshotInternal(
     case "fail": {
       if (config.shouldUpdateOutdated || forceUpdate) {
         if (config.isAllowedToChangeSnapshots) {
+          debug("updating failing snapshot");
           updateMatchSnapshotCall(callerLocation, actual, forceUpdate);
         }
       } else {

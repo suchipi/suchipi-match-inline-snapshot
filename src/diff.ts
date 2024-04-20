@@ -1,6 +1,9 @@
 import chalk from "chalk";
 import { diffStringsUnified } from "jest-diff";
 
+import makeDebug from "debug";
+const debug = makeDebug("@suchipi/test-snapshot:diff");
+
 const identity = <T>(val: T) => val;
 
 // We use the same colors as jest. They're good colors.
@@ -26,6 +29,8 @@ function getReceivedColor() {
 }
 
 export function diff(actual: string, expected: string | undefined) {
+  debug("chalk.level:", chalk.level);
+
   return diffStringsUnified(expected || "", actual, {
     aAnnotation: "Snapshot",
     aColor: getSnapshotColor(),

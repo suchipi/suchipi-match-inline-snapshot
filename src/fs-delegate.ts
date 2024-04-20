@@ -1,11 +1,12 @@
 import * as fs from "node:fs";
 import * as t from "pheno";
-import type { matchInlineSnapshotInternal } from "./match";
-import type { __configRaw } from "./config";
+
+import makeDebug from "debug";
+const debug = makeDebug("@suchipi/test-snapshot:fs-delegate");
 
 /**
- * An object that {@link matchInlineSnapshotInternal} will use to interact with the
- * filesystem. You set it in {@link __configRaw}.
+ * An object that `matchInlineSnapshot` will use to interact with the
+ * filesystem. You set it in `matchInlineSnapshot.config`.
  */
 export type FsDelegate = {
   readFileAsUtf8(filename: string): string;
@@ -14,9 +15,11 @@ export type FsDelegate = {
 
 export const defaultFsDelegate: FsDelegate = {
   readFileAsUtf8(filename) {
+    debug("reading", filename);
     return fs.readFileSync(filename, "utf-8");
   },
   writeUtf8ToFile(filename, content) {
+    debug("writing", filename);
     fs.writeFileSync(filename, content);
   },
 };

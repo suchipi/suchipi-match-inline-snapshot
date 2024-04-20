@@ -7,6 +7,9 @@ import { validateConfig } from "./config";
 import { getFile, queueFlushState } from "./ast-state";
 import { CallStructure } from "./call-structure";
 
+import makeDebug from "debug";
+const debug = makeDebug("@suchipi/test-snapshot:update");
+
 const EMPTY = Symbol("EMPTY");
 
 export function updateMatchSnapshotCall(
@@ -14,8 +17,11 @@ export function updateMatchSnapshotCall(
   actual: string,
   forceUpdate: boolean,
 ) {
+  debug("updating", loc);
+
   const config = validateConfig();
 
+  debug("reading", loc.fileName);
   const file = getFile(loc.fileName);
 
   const locIndex = lineColumnToIndex(
@@ -26,12 +32,15 @@ export function updateMatchSnapshotCall(
 
   let cs: CallStructure;
   if (forceUpdate) {
+    debug("using forceUpdate CallStructure");
     cs = config.callStructures.forceUpdate;
   } else {
+    debug("using normal CallStructure");
     cs = config.callStructures.normal;
   }
 
   let found = false;
+  debug("traversing AST...");
   ee.traverse(file.ast, {
     enter(nodePath) {
       const node = nodePath.node;
@@ -52,6 +61,7 @@ export function updateMatchSnapshotCall(
         return;
       }
 
+      debug("found CallStructure");
       found = true;
 
       const snapshotParentOrArray = get(
@@ -77,12 +87,16 @@ export function updateMatchSnapshotCall(
   });
 
   if (!found) {
+    debug("never found CallStructure...");
     throw new Error(
       `Could not find match inline snapshot call at ${JSON.stringify(loc)}. If you've wrapped matchInlineSnapshot with a helper function, make sure to increment matchInlineSnapshot.config.callStructure.stackOffset.`,
     );
   }
 
   if (config.updateScheduling === "auto") {
+    debug("queueing state flush");
     queueFlushState();
+  } else {
+    debug("not queueing state flush (manual mode)");
   }
 }

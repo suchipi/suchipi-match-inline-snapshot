@@ -1,5 +1,8 @@
 import type { CallStructure } from "./call-structure";
 
+import makeDebug from "debug";
+const debug = makeDebug("@suchipi/test-snapshot:expect-integration");
+
 // Integration with jest's "expect" package
 
 const expectCallStructure: CallStructure = {
@@ -29,8 +32,10 @@ export function installExpectIntegration(
   expect: typeof import("expect").expect,
   matchInlineSnapshot: typeof import(".").matchInlineSnapshot,
 ) {
+  debug("setting matchInlineSnapshot.config.callStructures.normal");
   matchInlineSnapshot.config.callStructures.normal = expectCallStructure;
 
+  debug("adding toMatchInlineSnapshot matcher");
   expect.extend({
     toMatchInlineSnapshot(actual, snapshot) {
       try {
@@ -45,6 +50,7 @@ export function installExpectIntegration(
     },
   });
 
+  debug("overriding expect.addSnapshotSerializer");
   (expect as any).addSnapshotSerializer = () => {
     throw new Error(
       "Modify matchInlineSnapshot.config.serializers instead of calling expect.addSnapshotSerializer",

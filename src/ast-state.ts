@@ -1,6 +1,9 @@
 import * as ee from "equivalent-exchange";
 import { validateConfig } from "./config";
 
+import makeDebug from "debug";
+const debug = makeDebug("@suchipi/test-snapshot:ast-state");
+
 type File = {
   path: string;
   ast: ee.AST;
@@ -11,6 +14,8 @@ type File = {
 const state = new Map<string, File>();
 
 export function getFile(fileName: string): File {
+  debug("opening file", fileName);
+
   const config = validateConfig();
 
   if (state.has(fileName)) {
@@ -38,6 +43,8 @@ export function getFile(fileName: string): File {
 }
 
 export function flushState() {
+  debug("flushing state");
+
   const config = validateConfig();
 
   const eeOptions: ee.TransmuteOptions = {
@@ -48,6 +55,8 @@ export function flushState() {
   };
 
   for (const [fileName, file] of state) {
+    debug("flushing state for", fileName);
+
     const result = ee.astToCode(file.ast, { ...eeOptions, fileName });
     const existingCode = config.fsDelegate.readFileAsUtf8(fileName);
     if (existingCode !== result.code) {
@@ -61,9 +70,12 @@ let queuedFlushState: NodeJS.Timeout | null = null;
 
 export function queueFlushState() {
   if (queuedFlushState == null) {
+    debug("queueing state flush");
     queuedFlushState = setTimeout(() => {
       queuedFlushState = null;
       flushState();
     }, 0);
+  } else {
+    debug("state flush already queued; skipping");
   }
 }
