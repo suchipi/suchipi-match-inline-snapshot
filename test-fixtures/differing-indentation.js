@@ -1,0 +1,1 @@
+matchInlineSnapshot({ a: true });

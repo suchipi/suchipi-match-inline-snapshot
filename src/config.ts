@@ -130,6 +130,19 @@ export type Config = {
      */
     forceUpdate: CallStructure;
   };
+
+  /**
+   * Whether to consider snapshots matching if the content matches but the
+   * indentation level doesn't.
+   *
+   * Defaults to `true`.
+   *
+   * For most cases, this is desirable behavior, as it allows you to indent your
+   * snapshots to match the indentation level of your code. However, if you've
+   * removed the default snapshot serializers and/or are working with
+   * indentation-sensitive values, you may wish to disable this.
+   */
+  allowDifferingIndentation: boolean;
 };
 
 export const t_Config: t.TypeValidator<Config> =
@@ -146,6 +159,7 @@ export const t_Config: t.TypeValidator<Config> =
       normal: t_CallStructure,
       forceUpdate: t_CallStructure,
     }),
+    allowDifferingIndentation: t.boolean,
   });
 
 /**
@@ -170,6 +184,7 @@ export const __configRaw: Config = {
     normal: defaultCallStructure,
     forceUpdate: defaultUpdateCallStructure,
   },
+  allowDifferingIndentation: true,
 };
 
 export function validateConfig(): Config {
