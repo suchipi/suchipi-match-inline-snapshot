@@ -90,7 +90,7 @@ test("the error message still makes sense", async () => {
     {
       "code": 1,
       "error": false,
-      "stderr": "<rootDir>/node_modules/expect/build/index.js:314
+      "stderr": "<rootDir>/node_modules/expect/build/index.js
           throw error;
           ^
 
@@ -151,7 +151,7 @@ test("makes expect.addSnapshotSerializer throw", async () => {
     {
       "code": 1,
       "error": false,
-      "stderr": "<rootDir>/dist/expect-integration.js:52
+      "stderr": "<rootDir>/dist/expect-integration.js
             throw new Error("Modify matchInlineSnapshot.config.serializers instead of calling expect.addSnapshotSerializer");
             ^
 

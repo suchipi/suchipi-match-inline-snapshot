@@ -38,7 +38,7 @@ test("error message on non-matching snapshot", async () => {
     {
       "code": 1,
       "error": false,
-      "stderr": "<rootDir>/node_modules/pheno/dist/bundle.js:178
+      "stderr": "<rootDir>/node_modules/pheno/dist/bundle.js
         throw new ErrorConstructor(messageMaker(target, type));
         ^
 

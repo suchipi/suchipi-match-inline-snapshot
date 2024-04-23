@@ -36,7 +36,7 @@ test("error message on non-matching snapshot", async () => {
     {
       "code": 1,
       "error": false,
-      "stderr": "<rootDir>/dist/match.js:77
+      "stderr": "<rootDir>/dist/match.js
                     throw new Error(message);
                     ^
 
@@ -96,7 +96,7 @@ test("error message on non-matching snapshot (with colors)", async () => {
     {
       "code": 1,
       "error": false,
-      "stderr": "<rootDir>/dist/match.js:77
+      "stderr": "<rootDir>/dist/match.js
                     throw new Error(message);
                     ^
 

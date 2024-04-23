@@ -18,6 +18,8 @@ export function cleanStr(str: string): string {
       //   whitespace(s), several non-newline characters... and that whole
       //   thing can happen more than once
       .replaceAll(/(?:\n(?:\x1B\[\d+m)?(\s*)at\s+[^\n]+)+/g, "\n$1at somewhere")
+      // normalize eg. "<rootDir>/dist/match.js:57\n\t\t\t\tthrow"
+      .replaceAll(/(\.js):\d+(\s+throw)/g, "$1$2")
   );
 }
 
