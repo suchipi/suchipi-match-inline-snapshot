@@ -14,7 +14,7 @@ const EMPTY = Symbol("EMPTY");
 
 export function updateMatchSnapshotCall(
   loc: Loc,
-  actual: string,
+  serializedReceived: string,
   forceUpdate: boolean,
 ) {
   debug("updating", loc);
@@ -79,7 +79,7 @@ export function updateMatchSnapshotCall(
         node,
         cs.snapshotPath,
         ee.types.templateLiteral(
-          [ee.types.templateElement({ raw: actual })],
+          [ee.types.templateElement({ raw: serializedReceived })],
           [],
         ),
       );

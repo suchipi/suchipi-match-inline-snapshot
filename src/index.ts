@@ -7,8 +7,8 @@ export { installExpectIntegration } from "./expect-integration";
 export type { Config, FsDelegate };
 
 export const matchInlineSnapshot = Object.assign(
-  function matchInlineSnapshot(actual: any, snapshot?: string | undefined) {
-    matchInlineSnapshotInternal(actual, snapshot, false);
+  function matchInlineSnapshot(received: any, snapshot?: string | undefined) {
+    matchInlineSnapshotInternal(received, snapshot, false);
   },
   {
     /**
@@ -17,10 +17,10 @@ export const matchInlineSnapshot = Object.assign(
      * snapshots.
      */
     u: function updateInlineSnapshot(
-      actual: any,
+      received: any,
       snapshot?: string | undefined,
     ) {
-      matchInlineSnapshotInternal(actual, snapshot, true);
+      matchInlineSnapshotInternal(received, snapshot, true);
     },
 
     /**

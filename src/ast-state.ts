@@ -1,5 +1,5 @@
 import * as ee from "equivalent-exchange";
-import { validateConfig } from "./config";
+import { Config, validateConfig } from "./config";
 
 import makeDebug from "debug";
 const debug = makeDebug("@suchipi/test-snapshot:ast-state");
@@ -22,12 +22,7 @@ export function getFile(fileName: string): File {
     return state.get(fileName)!;
   }
 
-  const eeOptions: ee.TransmuteOptions = {
-    parseOptions: config.parserOptions,
-    printOptions: {
-      printMethod: "recast.print",
-    },
-  };
+  const eeOptions = getTransmuteOptions(config);
 
   const content = config.fsDelegate.readFileAsUtf8(fileName);
   const ast = ee.codeToAst(content, { ...eeOptions, fileName });
@@ -46,13 +41,7 @@ export function flushState() {
   debug("flushing state");
 
   const config = validateConfig();
-
-  const eeOptions: ee.TransmuteOptions = {
-    parseOptions: config.parserOptions,
-    printOptions: {
-      printMethod: "recast.print",
-    },
-  };
+  const eeOptions = getTransmuteOptions(config);
 
   for (const [fileName, file] of state) {
     debug("flushing state for", fileName);
@@ -78,4 +67,13 @@ export function queueFlushState() {
   } else {
     debug("state flush already queued; skipping");
   }
+}
+
+function getTransmuteOptions(config: Config): ee.TransmuteOptions {
+  return {
+    parseOptions: config.parserOptions,
+    printOptions: {
+      printMethod: "recast.print",
+    },
+  };
 }

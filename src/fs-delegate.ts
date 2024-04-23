@@ -9,18 +9,18 @@ const debug = makeDebug("@suchipi/test-snapshot:fs-delegate");
  * filesystem. You set it in `matchInlineSnapshot.config`.
  */
 export type FsDelegate = {
-  readFileAsUtf8(filename: string): string;
-  writeUtf8ToFile(filename: string, content: string): void;
+  readFileAsUtf8(fileName: string): string;
+  writeUtf8ToFile(fileName: string, content: string): void;
 };
 
 export const defaultFsDelegate: FsDelegate = {
-  readFileAsUtf8(filename) {
-    debug("reading", filename);
-    return fs.readFileSync(filename, "utf-8");
+  readFileAsUtf8(fileName) {
+    debug("reading", fileName);
+    return fs.readFileSync(fileName, "utf-8");
   },
-  writeUtf8ToFile(filename, content) {
-    debug("writing", filename);
-    fs.writeFileSync(filename, content);
+  writeUtf8ToFile(fileName, content) {
+    debug("writing", fileName);
+    fs.writeFileSync(fileName, content);
   },
 };
 

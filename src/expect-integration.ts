@@ -37,9 +37,9 @@ export function installExpectIntegration(
 
   debug("adding toMatchInlineSnapshot matcher");
   expect.extend({
-    toMatchInlineSnapshot(actual, snapshot) {
+    toMatchInlineSnapshot(received, snapshot) {
       try {
-        matchInlineSnapshot(actual, snapshot);
+        matchInlineSnapshot(received, snapshot);
       } catch (err: any) {
         return {
           message: () => err.message,

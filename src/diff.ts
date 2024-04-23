@@ -28,10 +28,10 @@ function getReceivedColor() {
   }
 }
 
-export function diff(actual: string, expected: string | undefined) {
+export function diff(serializedReceived: string, snapshot: string | undefined) {
   debug("chalk.level:", chalk.level);
 
-  return diffStringsUnified(expected || "", actual, {
+  return diffStringsUnified(snapshot || "", serializedReceived, {
     aAnnotation: "Snapshot",
     aColor: getSnapshotColor(),
     bAnnotation: "Received",

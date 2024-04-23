@@ -2,13 +2,14 @@ import { getLocation } from "./get-location";
 import { updateMatchSnapshotCall } from "./update";
 import { validateConfig } from "./config";
 import { diff } from "./diff";
+import { compare } from "./compare";
 
 import makeDebug from "debug";
 const debug = makeDebug("@suchipi/test-snapshot:match");
 
 export function matchInlineSnapshotInternal(
-  actual: any,
-  expected: string | undefined,
+  rawReceivedValue: any,
+  snapshot: string | undefined,
   forceUpdate: boolean,
 ): void {
   debug("matchInlineSnapshotInternal called");
@@ -27,33 +28,18 @@ export function matchInlineSnapshotInternal(
     );
   }
 
-  debug("running snapshot serializers");
-  actual = config.serializers.reduce(
-    (prev, serializer) => serializer(prev),
-    actual,
-  );
-  if (typeof actual !== "string") {
-    actual = String(actual);
-  }
-
-  debug("comparing snapshot");
-  let outcome: "new" | "pass" | "fail";
-  if (typeof expected === "undefined") {
-    outcome = "new";
-  } else if (actual === expected) {
-    outcome = "pass";
-  } else {
-    outcome = "fail";
-  }
-
-  debug("comparison result:", outcome);
+  const { serializedReceived, outcome } = compare(rawReceivedValue, snapshot);
 
   switch (outcome) {
     case "new": {
       if (config.shouldCreateNew) {
         if (config.isAllowedToChangeSnapshots) {
           debug("creating new snapshot");
-          updateMatchSnapshotCall(callerLocation, actual, forceUpdate);
+          updateMatchSnapshotCall(
+            callerLocation,
+            serializedReceived,
+            forceUpdate,
+          );
         }
       } else {
         throw new Error(
@@ -63,25 +49,24 @@ export function matchInlineSnapshotInternal(
       break;
     }
     case "pass": {
-      // It's equivalent, but we still call update in order to, for example,
-      // change the second arg from a string literal to a template literal.
-      if (config.isAllowedToChangeSnapshots) {
-        debug("updating passing snapshot (in case that affects output)");
-        updateMatchSnapshotCall(callerLocation, actual, forceUpdate);
-      }
+      // Nothing to do
       break;
     }
     case "fail": {
       if (config.shouldUpdateOutdated || forceUpdate) {
         if (config.isAllowedToChangeSnapshots) {
           debug("updating failing snapshot");
-          updateMatchSnapshotCall(callerLocation, actual, forceUpdate);
+          updateMatchSnapshotCall(
+            callerLocation,
+            serializedReceived,
+            forceUpdate,
+          );
         }
       } else {
         const message = [
           "Received value didn't match snapshot.",
           "",
-          diff(String(actual), String(expected)),
+          diff(String(serializedReceived), String(snapshot)),
           "",
         ].join("\n");
 
