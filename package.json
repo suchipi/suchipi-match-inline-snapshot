@@ -28,7 +28,7 @@
     "vitest": "^1.4.0"
   },
   "dependencies": {
-    "@suchipi/error-utils": "^0.2.0",
+    "@suchipi/error-utils": "^0.2.1",
     "chalk": "^4.1.2",
     "debug": "^4.3.4",
     "equivalent-exchange": "^1.10.0",
