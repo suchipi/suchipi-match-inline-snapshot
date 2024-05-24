@@ -69,7 +69,7 @@ export type Config = {
    * Functions to pass the input value through in order to arrive at the final
    * snapshot format.
    *
-   * By default, this contains two functions:
+   * By default, this contains two functions (TODO update me):
    * - [pretty-format](https://www.npmjs.com/package/pretty-format)
    * - A function that wraps a string between newline characters, if the received string contains any newline characters.
    */
@@ -162,7 +162,23 @@ export const __configRaw: Config = {
   sourceMaps: {},
   serializers: [
     prettyFormat,
-    (str: string) => (str.includes("\n") ? "\n" + str + "\n" : str),
+    function addIndentation(str: string) {
+      if (!str.includes("\n")) {
+        return str;
+      }
+      // TODO: pass source indent amount into this function
+      // return str
+      //   .split("\n")
+      //   .map((line) => (line.trim() ? "  " + line : ""))
+      //   .join("\n");
+      return str;
+    },
+    function trim(str: string) {
+      return str.trim();
+    },
+    function wrapInEmptyLinesIfMultiline(str: string) {
+      return str.includes("\n") ? "\n" + str + "\n" : str;
+    },
   ],
   parserOptions: {},
   updateScheduling: "auto",
