@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import { test, beforeEach, expect } from "vitest";
 import { spawn } from "first-base";
-import { fixturesDir, workDirs, cleanResult } from "./test-utils";
+import { fixturesDir, workDirs } from "./test-utils";
 
 const ownWorkDir = workDirs.concat("anti-thrash-test");
 
@@ -32,11 +32,11 @@ test("updating repeatedly does not thrash file content back and forth endlessly"
 
     const contentAfter = fs.readFileSync(ownFixturePath.toString(), "utf-8");
 
-    return { result: run.result, contentBefore, contentAfter };
+    return { result: run.cleanResult(), contentBefore, contentAfter };
   }
 
   const run1 = await runFixture();
-  expect(cleanResult(run1.result)).toMatchInlineSnapshot(`
+  expect(run1.result).toMatchInlineSnapshot(`
     {
       "code": 0,
       "error": false,
@@ -49,7 +49,7 @@ test("updating repeatedly does not thrash file content back and forth endlessly"
   expect(run1.contentBefore).not.toBe(run1.contentAfter);
 
   const run2 = await runFixture();
-  expect(cleanResult(run2.result)).toMatchInlineSnapshot(`
+  expect(run2.result).toMatchInlineSnapshot(`
     {
       "code": 0,
       "error": false,
@@ -62,7 +62,7 @@ test("updating repeatedly does not thrash file content back and forth endlessly"
   expect(run2.contentBefore).toBe(run2.contentAfter);
 
   const run3 = await runFixture();
-  expect(cleanResult(run3.result)).toMatchInlineSnapshot(`
+  expect(run3.result).toMatchInlineSnapshot(`
     {
       "code": 0,
       "error": false,

@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import { test, beforeEach, expect } from "vitest";
 import { spawn } from "first-base";
-import { fixturesDir, workDirs, cleanResult } from "./test-utils";
+import { fixturesDir, workDirs } from "./test-utils";
 
 const ownWorkDir = workDirs.concat("invalid-config");
 
@@ -34,7 +34,7 @@ test("error message on non-matching snapshot", async () => {
   // Doesn't update snapshot
   expect(contentBefore).toBe(contentAfter);
 
-  expect(cleanResult(run.result)).toMatchInlineSnapshot(`
+  expect(run.cleanResult()).toMatchInlineSnapshot(`
     {
       "code": 1,
       "error": false,

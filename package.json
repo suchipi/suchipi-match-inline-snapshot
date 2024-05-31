@@ -20,7 +20,7 @@
     "@types/lodash": "^4.17.0",
     "@types/node": "^20.11.30",
     "expect": "^29.7.0",
-    "first-base": "^1.4.0",
+    "first-base": "^1.5.0",
     "kame": "^0.13.0",
     "nice-path": "^2.0.0",
     "prettier": "^3.2.5",

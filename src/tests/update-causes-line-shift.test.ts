@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import { test, beforeEach, expect } from "vitest";
 import { spawn } from "first-base";
-import { fixturesDir, workDirs, cleanResult, diffStrings } from "./test-utils";
+import { fixturesDir, workDirs, diffStrings } from "./test-utils";
 
 const ownWorkDir = workDirs.concat("update-causes-line-shift");
 
@@ -31,7 +31,7 @@ test("when first update shifts second call position, second call still gets upda
 
   const contentAfter = fs.readFileSync(ownFixturePath.toString(), "utf-8");
 
-  expect(cleanResult(run.result)).toMatchInlineSnapshot(`
+  expect(run.cleanResult()).toMatchInlineSnapshot(`
     {
       "code": 0,
       "error": false,

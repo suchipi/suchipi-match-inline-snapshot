@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import { test, beforeEach, expect } from "vitest";
 import { spawn } from "first-base";
-import { fixturesDir, workDirs, cleanResult } from "./test-utils";
+import { fixturesDir, workDirs } from "./test-utils";
 
 const ownWorkDir = workDirs.concat("none-outdated");
 
@@ -29,7 +29,7 @@ test("handles correct snapshots appropriately", async () => {
 
   const contentAfter = fs.readFileSync(ownFixturePath.toString(), "utf-8");
 
-  expect(cleanResult(run.result)).toMatchInlineSnapshot(`
+  expect(run.cleanResult()).toMatchInlineSnapshot(`
     {
       "code": 0,
       "error": false,

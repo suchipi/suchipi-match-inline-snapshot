@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import { test, beforeEach, expect } from "vitest";
 import { spawn } from "first-base";
-import { fixturesDir, workDirs, cleanResult, diffStrings } from "./test-utils";
+import { fixturesDir, workDirs, diffStrings } from "./test-utils";
 
 const ownWorkDir = workDirs.concat("force-update-call");
 
@@ -34,7 +34,7 @@ test("matchInlineSnapshot.u can be used to update snapshots even when shouldUpda
 
   const contentAfter = fs.readFileSync(ownFixturePath.toString(), "utf-8");
 
-  expect(cleanResult(run.result)).toMatchInlineSnapshot(`
+  expect(run.cleanResult()).toMatchInlineSnapshot(`
     {
       "code": 0,
       "error": false,

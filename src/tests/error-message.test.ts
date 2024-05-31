@@ -1,9 +1,15 @@
 import fs from "node:fs";
 import { test, beforeEach, expect } from "vitest";
-import { spawn } from "first-base";
-import { fixturesDir, workDirs, cleanResult } from "./test-utils";
+import { spawn, sanitizers } from "first-base";
+import { fixturesDir, workDirs } from "./test-utils";
 
 const ownWorkDir = workDirs.concat("error-message");
+
+const defaultSanitizers = [...sanitizers];
+beforeEach(() => {
+  // set contents of array back to what it defaults to
+  sanitizers.splice(0, sanitizers.length, ...defaultSanitizers);
+});
 
 beforeEach(() => {
   if (fs.existsSync(ownWorkDir.toString())) {
@@ -32,7 +38,7 @@ test("error message on non-matching snapshot", async () => {
   // Doesn't update snapshot
   expect(contentBefore).toBe(contentAfter);
 
-  expect(cleanResult(run.result)).toMatchInlineSnapshot(`
+  expect(run.cleanResult()).toMatchInlineSnapshot(`
     {
       "code": 1,
       "error": false,
@@ -92,7 +98,14 @@ test("error message on non-matching snapshot (with colors)", async () => {
   // Uncomment to manually verify that the colors look okay
   // console.log(run.result.stderr);
 
-  expect(cleanResult(run.result)).toMatchInlineSnapshot(`
+  // temporarily remove ansi color escapes result sanitizer,
+  // because we want colors in this snapshot
+  const newSanitizers = sanitizers.filter(
+    (sanitizer) => sanitizer.name !== "stripAnsi",
+  );
+  sanitizers.splice(0, sanitizers.length, ...newSanitizers);
+
+  expect(run.cleanResult()).toMatchInlineSnapshot(`
     {
       "code": 1,
       "error": false,

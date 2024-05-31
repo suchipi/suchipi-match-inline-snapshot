@@ -1,7 +1,7 @@
 import fs from "node:fs";
 import { test, beforeEach, expect } from "vitest";
 import { spawn } from "first-base";
-import { fixturesDir, workDirs, cleanResult, diffStrings } from "./test-utils";
+import { fixturesDir, workDirs, diffStrings } from "./test-utils";
 
 const ownWorkDir = workDirs.concat("manual-update-scheduling");
 
@@ -33,7 +33,7 @@ test("updates the snapshots that have been encountered thus far, at the expense 
 
   const contentAfter = fs.readFileSync(ownFixturePath.toString(), "utf-8");
 
-  expect(cleanResult(run.result)).toMatchInlineSnapshot(`
+  expect(run.cleanResult()).toMatchInlineSnapshot(`
     {
       "code": 0,
       "error": false,
