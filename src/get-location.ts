@@ -5,7 +5,7 @@ import {
 import { validateConfig } from "./config";
 
 import makeDebug from "debug";
-const debug = makeDebug("@suchipi/test-snapshot:get-location");
+const debug = makeDebug("@suchipi/match-inline-snapshot:get-location");
 
 // it's named Loc instead of Location so that TypeScript doesn't mix it up with
 // the dom 'Location' class if you forget to import it

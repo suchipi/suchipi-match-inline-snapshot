@@ -5,7 +5,7 @@ import { diff } from "./diff";
 import { compare } from "./compare";
 
 import makeDebug from "debug";
-const debug = makeDebug("@suchipi/test-snapshot:match");
+const debug = makeDebug("@suchipi/match-inline-snapshot:match");
 
 export function matchInlineSnapshotInternal(
   rawReceivedValue: any,

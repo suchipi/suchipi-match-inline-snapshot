@@ -2,7 +2,7 @@ import * as ee from "equivalent-exchange";
 import { Config, validateConfig } from "./config";
 
 import makeDebug from "debug";
-const debug = makeDebug("@suchipi/test-snapshot:ast-state");
+const debug = makeDebug("@suchipi/match-inline-snapshot:ast-state");
 
 type File = {
   path: string;

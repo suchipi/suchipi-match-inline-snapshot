@@ -2,7 +2,7 @@ import * as fs from "node:fs";
 import * as t from "pheno";
 
 import makeDebug from "debug";
-const debug = makeDebug("@suchipi/test-snapshot:fs-delegate");
+const debug = makeDebug("@suchipi/match-inline-snapshot:fs-delegate");
 
 /**
  * An object that `matchInlineSnapshot` will use to interact with the

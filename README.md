@@ -1,11 +1,11 @@
-# `@suchipi/test-snapshot`
+# `@suchipi/match-inline-snapshot`
 
 A standalone `matchInlineSnapshot` function (like [Jest's](https://jestjs.io/docs/snapshot-testing#inline-snapshots)). You can use it in a different test framework, or without a test framework at all.
 
 ## Usage Example
 
 ```ts
-const { matchInlineSnapshot } = require("@suchipi/test-snapshot");
+const { matchInlineSnapshot } = require("@suchipi/match-inline-snapshot");
 
 /* Uncomment the next line to update non-matching snapshots */
 // matchInlineSnapshot.config.shouldUpdateOutdated = true;
@@ -29,7 +29,7 @@ matchInlineSnapshot(
 
 ## API Documentation
 
-The `@suchipi/test-snapshot` module has the following named exports:
+The `@suchipi/match-inline-snapshot` module has the following named exports:
 
 ### `matchInlineSnapshot` (Function)
 

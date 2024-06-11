@@ -8,7 +8,7 @@ import { getFile, queueFlushState } from "./ast-state";
 import { CallStructure } from "./call-structure";
 
 import makeDebug from "debug";
-const debug = makeDebug("@suchipi/test-snapshot:update");
+const debug = makeDebug("@suchipi/match-inline-snapshot:update");
 
 const EMPTY = Symbol("EMPTY");
 

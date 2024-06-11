@@ -2,7 +2,7 @@ import chalk from "chalk";
 import { diffStringsUnified } from "jest-diff";
 
 import makeDebug from "debug";
-const debug = makeDebug("@suchipi/test-snapshot:diff");
+const debug = makeDebug("@suchipi/match-inline-snapshot:diff");
 
 const identity = <T>(val: T) => val;
 

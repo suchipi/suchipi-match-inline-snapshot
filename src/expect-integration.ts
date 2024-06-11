@@ -1,7 +1,7 @@
 import type { CallStructure } from "./call-structure";
 
 import makeDebug from "debug";
-const debug = makeDebug("@suchipi/test-snapshot:expect-integration");
+const debug = makeDebug("@suchipi/match-inline-snapshot:expect-integration");
 
 // Integration with jest's "expect" package
 

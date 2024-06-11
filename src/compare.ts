@@ -1,7 +1,7 @@
 import { validateConfig } from "./config";
 
 import makeDebug from "debug";
-const debug = makeDebug("@suchipi/test-snapshot:compare");
+const debug = makeDebug("@suchipi/match-inline-snapshot:compare");
 
 export type Outcome = "new" | "pass" | "fail";
 
