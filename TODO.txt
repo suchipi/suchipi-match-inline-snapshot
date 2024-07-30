@@ -5,7 +5,7 @@
 - [x] add a way to hook into the common `expect(a).toMatchInlineSnapshot(b)` signature. maybe support both by default?
   - [x] add a test for that case specifically
 - [ ] indent snapshots
-  - part of this is making snapshots with arbitrary indentation still match.
+  - [x] part of this is making snapshots with arbitrary indentation still match.
 - [ ] run prettier after updating snapshots if they have prettier configured.
   - [ ] might be nice for this to be wired using a generic "after update" api function hook thing
 - [x] runtime type validation of all the config stuff

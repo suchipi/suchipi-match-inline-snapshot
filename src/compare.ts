@@ -1,4 +1,5 @@
 import { validateConfig } from "./config";
+import { normalizeIndentation } from "./indent-tools";
 
 import makeDebug from "debug";
 const debug = makeDebug("@suchipi/match-inline-snapshot:compare");
@@ -26,10 +27,21 @@ export function compare(
   let outcome: Outcome;
   if (typeof snapshot === "undefined") {
     outcome = "new";
-  } else if (serializedReceived === snapshot) {
-    outcome = "pass";
   } else {
-    outcome = "fail";
+    const snapshotForCompare = normalizeIndentation(
+      snapshot,
+      config.indentation,
+    );
+    const receivedForCompare = normalizeIndentation(
+      serializedReceived,
+      config.indentation,
+    );
+
+    if (receivedForCompare === snapshotForCompare) {
+      outcome = "pass";
+    } else {
+      outcome = "fail";
+    }
   }
 
   debug("comparison result:", outcome);

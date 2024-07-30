@@ -36,3 +36,14 @@ export function diffStrings(namedStrings: { [key: string]: string }) {
     patchColor: identity,
   });
 }
+
+export function visualizeWhitespace(str: string, tabSize: number): string {
+  return str
+    .replace(/ /g, "·")
+    .replace(/\v/g, "␋")
+    .replace(/\t/g, "→" + " ".repeat(tabSize - 1))
+    .replace(/\n\r/g, "␊␍\n")
+    .replace(/\r\n/g, "␍␊\n")
+    .replace(/(?<![␍␊])\n/g, "␊\n")
+    .replace(/\r/g, "␍\n");
+}

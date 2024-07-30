@@ -130,6 +130,35 @@ export type Config = {
      */
     forceUpdate: CallStructure;
   };
+
+  /**
+   * Settings which control how/if the resulting snapshots are indented.
+   */
+  indentation: {
+    // Not yet implemented
+    // /**
+    //  * Whether snapshots created by `matchInlineSnapshot` should be indented to
+    //  * the level of their surrounding code.
+    //  *
+    //  * Defaults to **true**.
+    //  */
+    // enabled: boolean;
+
+    /**
+     * The character width that `matchInlineSnapshot` should use for tabs, for
+     * the purpose of indentation calculations.
+     *
+     * Defaults to **2**.
+     */
+    tabSize: number;
+
+    /**
+     * Whether snapshots should be indented using tabs or spaces.
+     *
+     * Defaults to **"spaces"**.
+     */
+    output: "tabs" | "spaces";
+  };
 };
 
 export const t_Config: t.TypeValidator<Config> =
@@ -145,6 +174,12 @@ export const t_Config: t.TypeValidator<Config> =
     callStructures: t.objectWithOnlyTheseProperties({
       normal: t_CallStructure,
       forceUpdate: t_CallStructure,
+    }),
+    indentation: t.objectWithOnlyTheseProperties({
+      // Not yet implemented
+      // enabled: t.boolean,
+      tabSize: t.number,
+      output: t.or(t.exactString("tabs"), t.exactString("spaces")),
     }),
   });
 
@@ -169,6 +204,12 @@ export const __configRaw: Config = {
   callStructures: {
     normal: defaultCallStructure,
     forceUpdate: defaultUpdateCallStructure,
+  },
+  indentation: {
+    // Not yet implemented
+    // enabled: true,
+    tabSize: 2,
+    output: "spaces",
   },
 };
 
