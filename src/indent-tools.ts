@@ -10,7 +10,7 @@ const t_Options = t.objectWithProperties({
   output: t.or(t.exactString("tabs"), t.exactString("spaces")),
 }) satisfies t.TypeValidator<Options>;
 
-export function normalizeIndentation(input: string, options: Options) {
+export function normalizeIndentation(input: string, options: Options): string {
   t.assertType(input, t.string);
   t.assertType(options, t_Options);
 
@@ -74,4 +74,37 @@ export function normalizeIndentation(input: string, options: Options) {
       throw new Error("Unexpected options.output value: " + options.output);
     }
   }
+}
+
+/**
+ * Returns number of space or tab characters (depending on `options`) that the
+ * source is equivalent to. `source` must only contain tabs or spaces.
+ */
+export function measureIndentation(
+  sourceIndent: string,
+  options: Options,
+): number {
+  const asSpaces = sourceIndent.replace(/\t/g, " ".repeat(options.tabSize));
+  const len = asSpaces.length;
+  const extra = len % options.tabSize;
+  const total = len - extra;
+  return total;
+}
+
+// Prepend every line in `source` with `indent`.
+export function addIndent(
+  source: string,
+  indent: string,
+  skipFirst: boolean = false,
+): string {
+  return source
+    .split("\n")
+    .map((line, index) => {
+      if (index === 0 && skipFirst) {
+        return line;
+      } else {
+        return indent + line;
+      }
+    })
+    .join("\n");
 }

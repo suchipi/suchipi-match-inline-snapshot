@@ -6,6 +6,7 @@ import type { Loc } from "./get-location";
 import { validateConfig } from "./config";
 import { getFile, queueFlushState } from "./ast-state";
 import { CallStructure } from "./call-structure";
+import { addIndent, measureIndentation } from "./indent-tools";
 
 import makeDebug from "debug";
 const debug = makeDebug("@suchipi/match-inline-snapshot:update");
@@ -29,6 +30,17 @@ export function updateMatchSnapshotCall(
     loc.lineNumber - 1,
     loc.columnNumber,
   );
+
+  // Determine source indentation
+  let sourceIndentLength = 0;
+  {
+    const partBefore = file.content.slice(0, locIndex);
+    const indentMatches = partBefore.match(/\s+$/);
+    if (indentMatches) {
+      const indentation = indentMatches[0];
+      sourceIndentLength = measureIndentation(indentation, config.indentation);
+    }
+  }
 
   let cs: CallStructure;
   if (forceUpdate) {
@@ -75,11 +87,19 @@ export function updateMatchSnapshotCall(
         );
       }
 
+      const indentChar = config.indentation.output === "tabs" ? "\t" : " ";
+      const outputIndent = indentChar.repeat(sourceIndentLength);
+      const indentedSerializedReceived = addIndent(
+        serializedReceived,
+        outputIndent,
+        true,
+      );
+
       set(
         node,
         cs.snapshotPath,
         ee.types.templateLiteral(
-          [ee.types.templateElement({ raw: serializedReceived })],
+          [ee.types.templateElement({ raw: indentedSerializedReceived })],
           [],
         ),
       );

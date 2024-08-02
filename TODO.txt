@@ -13,3 +13,4 @@
 - [ ] make config validation failure error message better
 - [ ] test if it works in bun and make it work there if it doesn't
 - [ ] make sure everything works with `\r\n` line endings
+- [ ] add automated test for sourcemap stuff
