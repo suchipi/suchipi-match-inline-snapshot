@@ -99,7 +99,11 @@ export function updateMatchSnapshotCall(
         node,
         cs.snapshotPath,
         ee.types.templateLiteral(
-          [ee.types.templateElement({ raw: indentedSerializedReceived })],
+          [
+            ee.types.templateElement({
+              raw: indentedSerializedReceived.replace(/`/g, "\\`"),
+            }),
+          ],
           [],
         ),
       );

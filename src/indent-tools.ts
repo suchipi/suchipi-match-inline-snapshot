@@ -88,7 +88,11 @@ export function measureIndentation(
   const len = asSpaces.length;
   const extra = len % options.tabSize;
   const total = len - extra;
-  return total;
+  if (options.output === "spaces") {
+    return total;
+  } else {
+    return total / options.tabSize;
+  }
 }
 
 // Prepend every line in `source` with `indent`.
