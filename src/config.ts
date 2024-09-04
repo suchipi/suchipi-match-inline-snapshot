@@ -161,28 +161,6 @@ export type Config = {
   };
 };
 
-export const t_Config: t.TypeValidator<Config> =
-  t.objectWithOnlyTheseProperties({
-    shouldUpdateOutdated: t.boolean,
-    shouldCreateNew: t.boolean,
-    isAllowedToChangeSnapshots: t.boolean,
-    fsDelegate: t_FsDelegate,
-    sourceMaps: t.anyObject,
-    serializers: t.arrayOf(t.anyFunction),
-    parserOptions: t.anyObject,
-    updateScheduling: t.or(t.exactString("auto"), t.exactString("manual")),
-    callStructures: t.objectWithOnlyTheseProperties({
-      normal: t_CallStructure,
-      forceUpdate: t_CallStructure,
-    }),
-    indentation: t.objectWithOnlyTheseProperties({
-      // Not yet implemented
-      // enabled: t.boolean,
-      tabSize: t.number,
-      output: t.or(t.exactString("tabs"), t.exactString("spaces")),
-    }),
-  });
-
 /**
  * Controls the behavior of `matchInlineSnapshot`. Change these properties (ie.
  * mutate this object) as needed.
@@ -213,7 +191,97 @@ export const __configRaw: Config = {
   },
 };
 
+const makeMessageMaker =
+  (name: string) => (target: any, expectedType: t.TypeValidator<any>) => {
+    const typeName = expectedType.name;
+    return `${name} should be ${/^[aeiou]/i.test(typeName) ? "an" : "a"} ${typeName}, but it was ${t.stringifyValue(target)}`;
+  };
+
 export function validateConfig(): Config {
-  t.assertType(__configRaw, t_Config);
+  t.assertType(__configRaw, t.object, makeMessageMaker("config"));
+
+  t.assertType(
+    __configRaw.shouldUpdateOutdated,
+    t.boolean,
+    makeMessageMaker("config.shouldUpdateOutdated"),
+  );
+
+  t.assertType(
+    __configRaw.shouldCreateNew,
+    t.boolean,
+    makeMessageMaker("config.shouldCreateNew"),
+  );
+
+  t.assertType(
+    __configRaw.isAllowedToChangeSnapshots,
+    t.boolean,
+    makeMessageMaker("config.isAllowedToChangeSnapshots"),
+  );
+
+  t.assertType(
+    __configRaw.fsDelegate,
+    t_FsDelegate,
+    makeMessageMaker("config.fsDelegate"),
+  );
+
+  t.assertType(
+    __configRaw.sourceMaps,
+    t.anyObject,
+    makeMessageMaker("config.sourceMaps"),
+  );
+
+  t.assertType(
+    __configRaw.serializers,
+    t.array,
+    makeMessageMaker("config.serializers"),
+  );
+
+  for (let i = 0; i < __configRaw.serializers.length; i++) {
+    t.assertType(
+      __configRaw.serializers[i],
+      t.Function,
+      makeMessageMaker(`config.serializers[${i}]`),
+    );
+  }
+
+  t.assertType(
+    __configRaw.parserOptions,
+    t.anyObject,
+    makeMessageMaker("config.parserOptions"),
+  );
+
+  t.assertType(
+    __configRaw.updateScheduling,
+    t.or(t.exactString("auto"), t.exactString("manual")),
+    makeMessageMaker("config.updateScheduling"),
+  );
+
+  t.assertType(
+    __configRaw.callStructures,
+    t.object,
+    makeMessageMaker("config.callStructures"),
+  );
+
+  t.assertType(
+    __configRaw.callStructures.normal,
+    t_CallStructure,
+    makeMessageMaker("config.callStructures.normal"),
+  );
+
+  t.assertType(
+    __configRaw.callStructures.forceUpdate,
+    t_CallStructure,
+    makeMessageMaker("config.callStructures.forceUpdate"),
+  );
+
+  t.assertType(
+    __configRaw.indentation,
+    t.objectWithOnlyTheseProperties({
+      tabSize: t.number,
+      output: t.or(t.exactString("tabs"), t.exactString("spaces")),
+    }),
+    makeMessageMaker("config.indentation"),
+  );
+
   return __configRaw;
 }

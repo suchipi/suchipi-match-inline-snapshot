@@ -1,3 +1,3 @@
-matchInlineSnapshot.config.callStructure = {
+matchInlineSnapshot.config.callStructures = {
   // all the stuff is missing!
 };
