@@ -11,7 +11,7 @@
 - [x] runtime type validation of all the config stuff
 - [x] fix SourceMap type in error-utils to be compatible with the one from mozilla source-map library
 - [x] make config validation failure error message better
-- [ ] make sure all the config stuff is in the readme
-- [ ] test if it works in bun and make it work there if it doesn't
+- [x] make sure all the config stuff is in the readme
+- [x] test if it works in bun and make it work there if it doesn't
 - [ ] make sure everything works with `\r\n` line endings
 - [ ] add automated test for sourcemap stuff

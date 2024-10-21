@@ -1,10 +1,11 @@
 import { __configRaw, Config } from "./config";
 import type { FsDelegate } from "./fs-delegate";
+import type { CallStructure } from "./call-structure";
 import { matchInlineSnapshotInternal } from "./match";
 import { flushState } from "./ast-state";
 export { installExpectIntegration } from "./expect-integration";
 
-export type { Config, FsDelegate };
+export type { Config, FsDelegate, CallStructure };
 
 export const matchInlineSnapshot = Object.assign(
   function matchInlineSnapshot(received: any, snapshot?: string | undefined) {

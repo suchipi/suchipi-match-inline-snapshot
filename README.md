@@ -35,7 +35,7 @@ The `@suchipi/match-inline-snapshot` module has the following named exports:
 
 The primary function of this library. Behaves the same as [Jest's `expect(value).toMatchInlineSnapshot(snapshot)`](https://jestjs.io/docs/snapshot-testing#inline-snapshots), except that the call signature is `matchInlineSnapshot(value, snapshot)`.
 
-If the value doesn't match the snapshot, an error will be thrown. To instead update the snapshot, set `matchInlineSnapshot.config.shouldUpdateOutdated` to `true`.
+If the value doesn't match the snapshot, an error will be thrown. To instead update the snapshot, set `matchInlineSnapshot.config.shouldUpdateOutdated` to `true`, or temporarily replace the `matchInlineSnapshot` call with `matchInlineSnapshot.u`.
 
 For more info about `matchInlineSnapshot.config`, see the "Config" heading below.
 
@@ -56,15 +56,15 @@ The TypeScript type of the value `matchInlineSnapshot.config`, which is the glob
   - When the value is "auto", snapshots will be updated shortly after the `matchInlineSnapshot` call(s), in a `setTimeout(..., 0)`.
   - When the value is "manual", snapshots won't be updated until you call `matchInlineSnapshot.flushUpdates`.
 - `callStructures` (object): Option which controls which AST code structures will be targeted by the update system.
-  - By default, it looks for code like:
-    ```ts
-    matchInlineSnapshot(something, somethingElse);
-    ```
-  - but you could configure this option to make it instead look for (as an example):
-    ```ts
-    expect(something).toMatchInlineSnapshot(somethingElse);
-    ```
-  - TODO add CallStructures documentation below
+  By default, it looks for code like:
+  ```ts
+  matchInlineSnapshot(something, somethingElse);
+  ```
+  but you could configure this option to make it instead look for (as an example):
+  ```ts
+  expect(something).toMatchInlineSnapshot(somethingElse);
+  ```
+  See "CallStructure" heading below for more info.
 - `indentation` (object): Options which control how indentation is interpreted by the library. The following properties are present:
   - `tabSize` (number): The character width that `matchInlineSnapshot` should use for tabs, for the purpose of indentation calculations. Defaults to **2**.
   - `output` (string): Whether snapshots should be indented using tabs or spaces. Valid values are `"tabs"` or `"spaces"`. Defaults to **"spaces"**.
@@ -85,6 +85,61 @@ type FsDelegate = {
   writeUtf8ToFile(filename: string, content: string): void;
 };
 ```
+
+### `CallStructure` (Type)
+
+A TypeScript type used by `matchInlineSnapshot.config.callStructures`, which is an object containing AST patterns that the system should detect as match-inline-snapshot calls.
+
+`matchInlineSnapshot.config.callStructures` is an object with two properties, `normal` and `forceUpdate`, which are `CallStructure`s describing the AST pattern of a normal matchInlineSnapshot call and a force-update matchInlineSnapshot call, respectively.
+
+If you wrap `matchInlineSnapshot` calls in a helper function, you can change `matchInlineSnapshot.config.callStructures` such that the system targets your wrapper function instead of the wrapped `matchInlineSnapshot` call. The primary use-case for this is integrating `matchInlineSnapshot` with "expect" or "assert" helpers.
+
+Each `CallStructure` has the following properties:
+
+````ts
+export type CallStructure = {
+  /**
+   * The AST pattern which represents a match-inline-snapshot call.
+   *
+   * By default, this is:
+   *
+   * ```json
+   * {
+   *   type: "CallExpression",
+   *   callee: {
+   *     type: "Identifier",
+   *     name: "matchInlineSnapshot"
+   *   }
+   * }
+   * ```
+   *
+   * You can change this to make the snapshot update system target a different
+   * code pattern.
+   */
+  astPattern: { [key: string]: any };
+
+  /**
+   * The property path to the snapshot node, starting from the
+   * configured `astPattern`.
+   *
+   * By default, this is `["arguments", 1]`.
+   *
+   * This controls where the snapshot template literal string gets placed.
+   */
+  snapshotPath: Array<string | number>;
+
+  /**
+   * How many call stack frames away the call-structure-to-update is from the
+   * actual library `matchInlineSnapshot` call.
+   *
+   * If you wrap `matchInlineSnapshot` in a helper method, you'll need to
+   * increase this number.
+   *
+   * Defaults to `0` (ie. the call-to-update is the same as the call to the library).
+   */
+  stackOffset: number;
+};
+````
 
 ## License
 
