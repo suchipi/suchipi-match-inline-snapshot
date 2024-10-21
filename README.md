@@ -51,6 +51,23 @@ The TypeScript type of the value `matchInlineSnapshot.config`, which is the glob
 - `fsDelegate` (object): Object containing filesystem functions which will be used to update snapshots. See "FsDelegate" heading below for more info.
 - `sourceMaps` (object): Object which you can add source maps onto in order to make snapshots work in TypeScript files and etc.
 - `serializers` (Array of Functions): Transforms to pass the input value through in order to arrive at the final snapshot format.
+- `parserOptions` (object): Options for the underlying parser, `equivalent-exchange`. See [here](https://github.com/suchipi/equivalent-exchange/blob/70ebd666a2805835cf03efe971a7efd479430600/api/ee-types.d.ts#L11-L73).
+- `updateScheduling` (string): Option which controls when snapshot updates get written back to disk. Can be either "auto" or "manual", and defaults to "auto".
+  - When the value is "auto", snapshots will be updated shortly after the `matchInlineSnapshot` call(s), in a `setTimeout(..., 0)`.
+  - When the value is "manual", snapshots won't be updated until you call `matchInlineSnapshot.flushUpdates`.
+- `callStructures` (object): Option which controls which AST code structures will be targeted by the update system.
+  - By default, it looks for code like:
+    ```ts
+    matchInlineSnapshot(something, somethingElse);
+    ```
+  - but you could configure this option to make it instead look for (as an example):
+    ```ts
+    expect(something).toMatchInlineSnapshot(somethingElse);
+    ```
+  - TODO add CallStructures documentation below
+- `indentation` (object): Options which control how indentation is interpreted by the library. The following properties are present:
+  - `tabSize` (number): The character width that `matchInlineSnapshot` should use for tabs, for the purpose of indentation calculations. Defaults to **2**.
+  - `output` (string): Whether snapshots should be indented using tabs or spaces. Valid values are `"tabs"` or `"spaces"`. Defaults to **"spaces"**.
 
 ### `FsDelegate` (Type)
 
