@@ -1,6 +1,6 @@
 {
   "name": "@suchipi/match-inline-snapshot",
-  "version": "0.1.0",
+  "version": "0.0.1",
   "description": "standlone 'match inline snapshot' function",
   "main": "dist/index.js",
   "scripts": {
