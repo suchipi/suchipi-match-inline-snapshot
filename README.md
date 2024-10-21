@@ -27,6 +27,24 @@ matchInlineSnapshot(
 ); // throws Error or updates self depending on `matchInlineSnapshot.config.shouldUpdateOutdated`
 ```
 
+## `expect` package integration
+
+To configure `matchInlineSnapshot` to work with Jest's `expect` package, you can use the `installExpectIntegration` function:
+
+```ts
+import {
+  matchInlineSnapshot,
+  installExpectIntegration,
+} from "@suchipi/match-inline-snapshot";
+import { expect } from "expect";
+
+installExpectIntegration(expect, matchInlineSnapshot);
+```
+
+> NOTE: Depending on the version of the "expect" package in use, you may need to modify `matchInlineSnapshot.config.callStructures.normal.stackOffset` after calling `installExpectIntegration`. Try it with the default value, and if it doesn't work, try changing it.
+
+For more information on how this works, see the `CallStructure` heading below.
+
 ## API Documentation
 
 The `@suchipi/match-inline-snapshot` module has the following named exports:
