@@ -159,6 +159,15 @@ export type Config = {
      */
     output: "tabs" | "spaces";
   };
+
+  /**
+   * When `matchInlineSnapshot` adds lines to a file, it needs to choose which
+   * line ending characters to use. It attempts to autodetect based on the line
+   * endings in the file, but in files with no line endings (or evenly-mixed
+   * line endings), `matchInlineSnapshot` uses "\r\n" on Windows and "\n" on
+   * other platforms. To override that fallback, modify this value.
+   */
+  fallbackLineEnding: "\n" | "\r\n";
 };
 
 /**
@@ -189,6 +198,7 @@ export const __configRaw: Config = {
     tabSize: 2,
     output: "spaces",
   },
+  fallbackLineEnding: process.platform === "win32" ? "\r\n" : "\n",
 };
 
 const makeMessageMaker =
@@ -281,6 +291,12 @@ export function validateConfig(): Config {
       output: t.or(t.exactString("tabs"), t.exactString("spaces")),
     }),
     makeMessageMaker("config.indentation"),
+  );
+
+  t.assertType(
+    __configRaw.fallbackLineEnding,
+    t.union(t.exactString("\r\n"), t.exactString("\n")),
+    makeMessageMaker("config.fallbackLineEnding"),
   );
 
   return __configRaw;

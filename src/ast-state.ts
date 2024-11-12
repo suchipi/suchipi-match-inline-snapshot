@@ -2,6 +2,7 @@ import * as ee from "equivalent-exchange";
 import { Config, validateConfig } from "./config";
 
 import makeDebug from "debug";
+import { detectEOL } from "./detect-eol";
 const debug = makeDebug("@suchipi/match-inline-snapshot:ast-state");
 
 type File = {
@@ -46,10 +47,17 @@ export function flushState() {
   for (const [fileName, file] of state) {
     debug("flushing state for", fileName);
 
-    const result = ee.astToCode(file.ast, { ...eeOptions, fileName });
     const existingCode = config.fsDelegate.readFileAsUtf8(fileName);
-    if (existingCode !== result.code) {
-      config.fsDelegate.writeUtf8ToFile(fileName, result.code);
+    const existingCodeEOL = detectEOL(existingCode, config.fallbackLineEnding);
+
+    const result = ee.astToCode(file.ast, { ...eeOptions, fileName });
+    const resultWithNormalizedEOL = result.code.replaceAll(
+      /[\r\n]+/g,
+      existingCodeEOL,
+    );
+
+    if (existingCode !== resultWithNormalizedEOL) {
+      config.fsDelegate.writeUtf8ToFile(fileName, resultWithNormalizedEOL);
     }
     state.delete(fileName);
   }
