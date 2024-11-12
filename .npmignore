@@ -1,5 +1,8 @@
 src
 dist/**/*.test.*
 .prettierrc
+.prettierignore
 test-fixtures
 test-workdirs
+samples
+vitest.config.mts
