@@ -52,7 +52,7 @@ export function flushState() {
 
     const result = ee.astToCode(file.ast, { ...eeOptions, fileName });
     const resultWithNormalizedEOL = result.code.replaceAll(
-      /[\r\n]+/g,
+      /(?:\r\n|\n\r|\r|\n)/g,
       existingCodeEOL,
     );
 

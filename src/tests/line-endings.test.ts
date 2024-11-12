@@ -16,7 +16,7 @@ beforeEach(() => {
 
 test("updates with LF", async () => {
   const content = fs.readFileSync(fixture.toString(), "utf-8");
-  const contentLF = content.replaceAll(/[\r\n]+/g, "\n");
+  const contentLF = content.replaceAll(/(?:\r\n|\n\r|\r|\n)/g, "\n");
 
   const ownFixturePath = ownWorkDir.concat("updates-with-lf.js");
 
@@ -63,6 +63,10 @@ test("updates with LF", async () => {
     + ··"a":·true,␊
     + }␊
     + \`);␊
+      ␊
+      //·intentional·double-empty-line·below:␊
+      ␊
+      ␊
       //·outdated␊
       matchInlineSnapshot(␊
       ··{·b:·true·},␊
@@ -73,6 +77,7 @@ test("updates with LF", async () => {
     + }␊
       \`,␊
       );␊
+      ␊
       //·up-to-date␊
       matchInlineSnapshot(␊
       ··{·c:·false·},␊
@@ -89,7 +94,7 @@ test("updates with LF", async () => {
 
 test("updates with CRLF", async () => {
   const content = fs.readFileSync(fixture.toString(), "utf-8");
-  const contentCRLF = content.replaceAll(/[\r\n]+/g, "\r\n");
+  const contentCRLF = content.replaceAll(/(?:\r\n|\n\r|\r|\n)/g, "\r\n");
 
   const ownFixturePath = ownWorkDir.concat("updates-with-crlf.js");
 
@@ -136,6 +141,10 @@ test("updates with CRLF", async () => {
     + ··"a":·true,␍␊
     + }␍␊
     + \`);␍␊
+      ␍␊
+      //·intentional·double-empty-line·below:␍␊
+      ␍␊
+      ␍␊
       //·outdated␍␊
       matchInlineSnapshot(␍␊
       ··{·b:·true·},␍␊
@@ -146,6 +155,7 @@ test("updates with CRLF", async () => {
     + }␍␊
       \`,␍␊
       );␍␊
+      ␍␊
       //·up-to-date␍␊
       matchInlineSnapshot(␍␊
       ··{·c:·false·},␍␊

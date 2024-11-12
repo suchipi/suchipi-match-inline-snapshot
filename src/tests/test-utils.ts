@@ -42,8 +42,12 @@ export function visualizeWhitespace(str: string, tabSize: number): string {
     .replace(/ /g, "·")
     .replace(/\v/g, "␋")
     .replace(/\t/g, "→" + " ".repeat(tabSize - 1))
-    .replace(/\n\r/g, "␊␍\n")
-    .replace(/\r\n/g, "␍␊\n")
-    .replace(/(?<![␍␊])\n/g, "␊\n")
-    .replace(/\r/g, "␍\n");
+    .replace(/\r/g, "␍")
+    .replace(/\n/g, "␊")
+    .replace(/␍␊/g, "__TEST_UTILS_CRLF__")
+    .replace(/␊␍/g, "__TEST_UTILS_LFCR__")
+    .replace(/␊/g, "␊\n")
+    .replace(/␍/g, "␍\n")
+    .replace(/__TEST_UTILS_CRLF__/g, "␍␊\n")
+    .replace(/__TEST_UTILS_LFCR__/g, "␊␍\n");
 }
