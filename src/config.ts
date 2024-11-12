@@ -184,7 +184,13 @@ export const __configRaw: Config = {
   sourceMaps: {},
   serializers: [
     prettyFormat,
-    (str: string) => (str.includes("\n") ? "\n" + str + "\n" : str),
+    function wrapMultilineWithNewlines(str: string) {
+      if (/[\r\n]/.test(str)) {
+        return `\n${str}\n`;
+      } else {
+        return str;
+      }
+    },
   ],
   parserOptions: {},
   updateScheduling: "auto",
