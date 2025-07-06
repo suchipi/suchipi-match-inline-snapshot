@@ -45,7 +45,7 @@ test("error message on non-matching snapshot", async () => {
     TypeError: config.callStructures.normal should be an objectWithOnlyTheseProperties({ astPattern: objectWithProperties({ type: string }), snapshotPath: arrayOf(union(string, number)), stackOffset: number }), but it was "<undefined>"
         at somewhere
 
-    Node.js v20.11.1
+    Node.js v24.3.0
     ",
       "stdout": "",
     }

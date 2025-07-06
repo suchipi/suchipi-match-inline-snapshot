@@ -103,7 +103,7 @@ test("the error message still makes sense", async () => {
     + "9"
         at somewhere
 
-    Node.js v20.11.1
+    Node.js v24.3.0
     ",
       "stdout": "",
     }

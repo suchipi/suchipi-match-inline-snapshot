@@ -91,8 +91,8 @@ test("the error message still makes sense", async () => {
       "code": 1,
       "error": false,
       "stderr": "<rootDir>/node_modules/expect/build/index.js
-          throw error;
-          ^
+        throw error;
+        ^
 
     JestAssertionError: Received value didn't match snapshot.
 
@@ -114,7 +114,7 @@ test("the error message still makes sense", async () => {
       }
     }
 
-    Node.js v20.11.1
+    Node.js v24.3.0
     ",
       "stdout": "",
     }
@@ -158,7 +158,7 @@ test("makes expect.addSnapshotSerializer throw", async () => {
     Error: Modify matchInlineSnapshot.config.serializers instead of calling expect.addSnapshotSerializer
         at somewhere
 
-    Node.js v20.11.1
+    Node.js v24.3.0
     ",
       "stdout": "",
     }

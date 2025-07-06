@@ -1,6 +1,6 @@
 import * as t from "pheno";
 import type { SourceMap } from "@suchipi/error-utils";
-import type { ParseOptions } from "equivalent-exchange";
+import type { Options } from "equivalent-exchange";
 import { FsDelegate, defaultFsDelegate, t_FsDelegate } from "./fs-delegate";
 import { format as prettyFormat } from "pretty-format";
 import {
@@ -79,7 +79,7 @@ export type Config = {
    * Options for the AST parser used to locate `matchInlineSnapshot` calls. In
    * most cases, you won't need to change these from the defaults.
    */
-  parserOptions: ParseOptions;
+  parserOptions: Options;
 
   /**
    * Option which controls when snapshot updates get written back to disk.

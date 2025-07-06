@@ -17,26 +17,26 @@
   "license": "MIT",
   "devDependencies": {
     "@types/debug": "^4.1.12",
-    "@types/lodash": "^4.17.0",
-    "@types/node": "^20.11.30",
-    "expect": "^29.7.0",
-    "first-base": "^1.5.0",
-    "kame": "^0.13.0",
-    "nice-path": "^2.0.0",
-    "prettier": "^3.2.5",
-    "typescript": "^5.4.3",
-    "vitest": "^1.4.0"
+    "@types/lodash": "^4.17.20",
+    "@types/node": "^24.0.10",
+    "expect": "^30.0.4",
+    "first-base": "^1.5.2",
+    "kame": "^1.15.0",
+    "nice-path": "^3.0.0",
+    "prettier": "^3.6.2",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
   },
   "dependencies": {
     "@suchipi/error-utils": "^0.2.1",
-    "chalk": "^4.1.2",
-    "debug": "^4.3.4",
-    "equivalent-exchange": "^1.10.0",
+    "chalk": "^5.4.1",
+    "debug": "^4.4.1",
+    "equivalent-exchange": "^3.0.0",
     "error-stack-parser": "^2.1.4",
-    "jest-diff": "^29.7.0",
+    "jest-diff": "^30.0.4",
     "line-and-column-to-string-index": "^1.0.0",
     "lodash": "^4.17.21",
     "pheno": "^0.12.0",
-    "pretty-format": "^29.7.0"
+    "pretty-format": "^30.0.2"
   }
 }

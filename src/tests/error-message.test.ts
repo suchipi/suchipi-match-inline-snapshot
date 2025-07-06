@@ -59,7 +59,7 @@ test("error message on non-matching snapshot", async () => {
       ↵
         at somewhere
 
-    Node.js v20.11.1
+    Node.js v24.3.0
     ",
       "stdout": "",
     }
@@ -126,7 +126,7 @@ test("error message on non-matching snapshot (with colors)", async () => {
     [2m  ↵[22m
         at somewhere
 
-    Node.js v20.11.1
+    Node.js v24.3.0
     ",
       "stdout": "",
     }

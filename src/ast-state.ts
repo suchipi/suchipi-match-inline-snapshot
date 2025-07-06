@@ -26,11 +26,11 @@ export function getFile(fileName: string): File {
   const eeOptions = getTransmuteOptions(config);
 
   const content = config.fsDelegate.readFileAsUtf8(fileName);
-  const ast = ee.codeToAst(content, { ...eeOptions, fileName });
+  const ast = ee.parse(content, { ...eeOptions, fileName });
 
   const file: File = {
     path: fileName,
-    ast,
+    ast: ast as ee.AST,
     content,
   };
 
@@ -50,7 +50,7 @@ export function flushState() {
     const existingCode = config.fsDelegate.readFileAsUtf8(fileName);
     const existingCodeEOL = detectEOL(existingCode, config.fallbackLineEnding);
 
-    const result = ee.astToCode(file.ast, { ...eeOptions, fileName });
+    const result = ee.print(file.ast, { ...eeOptions, fileName });
     const resultWithNormalizedEOL = result.code.replaceAll(
       /(?:\r\n|\n\r|\r|\n)/g,
       existingCodeEOL,
@@ -77,10 +77,11 @@ export function queueFlushState() {
   }
 }
 
-function getTransmuteOptions(config: Config): ee.TransmuteOptions {
+function getTransmuteOptions(config: Config): ee.Options {
   return {
-    parseOptions: config.parserOptions,
+    ...config.parserOptions,
     printOptions: {
+      ...(config.parserOptions.printOptions || null),
       printMethod: "recast.print",
     },
   };
